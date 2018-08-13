@@ -4,17 +4,18 @@
 using namespace std;
 class Wallet {
 public:
-    Wallet();
+    Wallet(string name, double bal);
     ~Wallet();
     void addExpense();
-    void addIncome(float Amount,  string Date, string Detail, int Category);
+    void addIncome();
     void deleteExpense(string Date);
     void deleteIncome(string Date);
     void editExpense(string Date);
     void editIncome(string Date);
     void search(string Date);
     void sort();
-    void displayBalance();
+    double displayBalance();
+    string displayUsername();
     void displaySummary();
     void warning();
     void displayChart();
@@ -22,6 +23,7 @@ public:
     void changeCurrency();
 
 private:
+    string username;
     double balance;
 };
 
