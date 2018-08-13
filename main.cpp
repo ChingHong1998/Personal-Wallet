@@ -29,23 +29,26 @@ int main() {
         fout << "Balance: " << balance <<endl;
     }
     else {
+        string username = "";
+        double balance;
         while(!fin.eof()&& (fin.good()))
         {
-            string username;
-            double balance;
-            fin >> username;
             string temp;
+            getline(fin,temp);
+            for(int i = 10; i< temp.length(); i++) {
+                username += temp[i];
+            }
             fin >> temp;
             stringstream ss(temp);
             ss >> balance;
-            w1 = new Wallet(username,balance);
         }
+        w1 = new Wallet(username,balance);
     }
     display_menu();
 }
 
 void display_menu() {
-    system("CLS");
+    //system("CLS");
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
     cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n ";
     int option;

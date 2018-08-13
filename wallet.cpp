@@ -8,8 +8,6 @@ using namespace std;
 /* Can create a saving wallet*/
 
 Wallet::Wallet(string name, double bal) : username(name),balance(bal) {
-    cout << "User: " << username <<endl;
-    cout<< "Your current balance: "<< balance<<endl;
 }
 
 Wallet::~Wallet() {}

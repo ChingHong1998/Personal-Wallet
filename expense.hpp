@@ -12,7 +12,7 @@ private:
     string date;
     string category;
 
-public:ss
+public:
     static int counter;
     Expense();
     ~Expense();

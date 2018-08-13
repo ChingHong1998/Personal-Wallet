@@ -63,7 +63,7 @@ void Expense::add_record(double amount, string detail, string category) {
     cout << "\nSuccess! ";
 }
 
-void Expense::remove_reocrd(string id) {
+void Expense::remove_record(string id) {
 
 }
 
