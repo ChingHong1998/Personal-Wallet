@@ -2,9 +2,10 @@
 #define EXPENSE_H
 #include <string>
 
+
 using namespace std;
 
-class Expense {
+class Expense{
 private:
     string ID;
     double amount;
@@ -14,6 +15,7 @@ private:
 
 public:
     static int counter;
+    void updateCounter();
     Expense();
     ~Expense();
     void add_record(double amount, string detail, string category);

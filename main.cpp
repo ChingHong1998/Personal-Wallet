@@ -4,13 +4,10 @@
 #include "wallet.cpp"
 
 void display_menu();
+void check_account(Wallet *wallet);
 
 Wallet *w1;
 
-bool is_emptyf(ifstream& pFile)
-{
-    return pFile.peek() == ifstream::traits_type::eof();
-}
 
 int main() {
     ifstream fin;
@@ -21,12 +18,13 @@ int main() {
         cout<< "Create a wallet.\nEnter your username: ";
         string username;
         cin >> username;
-        cout << "Enter your balance in your wallet.";
+        cout << "Enter your balance in your wallet: ";
         double balance;
         cin>> balance;
         w1 = new Wallet(username,balance);
         fout << "Username: "<< username <<endl;
         fout << "Balance: " << balance <<endl;
+        fout.close();
     }
     else {
         string username = "";
@@ -44,20 +42,33 @@ int main() {
         }
         w1 = new Wallet(username,balance);
     }
-    display_menu();
+    fin.close();
+    while(true) {
+        display_menu();
+    }
 }
 
 void display_menu() {
-    //system("CLS");
+    system("CLS");
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
-    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n ";
+    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \nEnter Your choice: ";
     int option;
     cin>> option;
     switch(option) {
     case 1:
         w1->addExpense();
         break;
+    case 2:
+        w1->addIncome();
+        break;
     default:
         cout << "\nInvalid option."<<endl;
     }
 }
+
+void check_account(Wallet *wallet) {
+
+}
+
+
+

@@ -21,6 +21,8 @@ public:
     void displayChart();
     void setBudget();
     void changeCurrency();
+    bool isEnough(double amount);
+    void update_data();
 
 private:
     string username;

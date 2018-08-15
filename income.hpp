@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class Income {
+class Income{
 private:
     string ID;
     double amount;
@@ -19,6 +19,7 @@ public:
     void add_record(double amount, string detail, string category);
     void remove_record(string id);
     string getID();
+    void updateCounter();
 
 };
 
