@@ -23,7 +23,7 @@ public:
     void changeCurrency();
     bool isEnough(double amount);
     void update_data();
-
+    void display_record(ifstream &filen1);
 private:
     string username;
     double balance;
