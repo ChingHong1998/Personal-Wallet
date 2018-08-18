@@ -43,15 +43,17 @@ int main() {
         w1 = new Wallet(username,balance);
     }
     fin.close();
-    while(true) {
-        display_menu();
-    }
+    display_menu();
 }
 
 void display_menu() {
+    ifstream fin;
+    fin.open("expenses.txt", ios::in);
+    ifstream fin2;
+    fin2.open("incomes.txt", ios::in);
     system("CLS");
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
-    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \nEnter Your choice: ";
+    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \nEnter Your choice: ";
     int option;
     cin>> option;
     switch(option) {
@@ -60,6 +62,12 @@ void display_menu() {
         break;
     case 2:
         w1->addIncome();
+        break;
+    case 3:
+        w1->display_record(fin);
+        break;
+    case 4:
+        w1->display_record(fin2);
         break;
     default:
         cout << "\nInvalid option."<<endl;
