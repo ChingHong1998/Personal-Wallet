@@ -8,7 +8,25 @@
 using namespace std;
 
 /* Can create a saving wallet*/
+struct Node{
+    string data;
+    struct Node* next;
+};
+Node *Insert(Node *head, string x){
+    Node *temp = new Node();
+    temp->data = x;
+    temp->next = head;
+    head = temp;
+    return head;
+}
 
+void print(Node *p){
+    if(p == NULL){
+        return;
+    }
+    print(p->next);
+    cout << p->data << endl;
+}
 Wallet::Wallet(string name, double bal) : username(name),balance(bal) {
 }
 
@@ -68,7 +86,8 @@ double Wallet::displayBalance(){
 string Wallet::displayUsername() {
     return username;
 }
-void Wallet::displaySummary(){}
+void Wallet::displaySummary(){
+}
 void Wallet::warning(){}
 void Wallet::displayChart(){}
 void Wallet::setBudget(){}
@@ -84,4 +103,15 @@ void Wallet::update_data() {
     temp.close();
     remove("Wallet.txt");
     rename("temp.txt", "Wallet.txt");
+}
+
+void Wallet::display_record(ifstream &filen1){
+    Node *head = NULL;
+    string record;
+    while(!filen1.eof()){
+        getline(filen1, record);
+        head = Insert(head, record);
+    }
+    print(head);
+    filen1.close();
 }
