@@ -27,6 +27,30 @@ void print(Node *p){
     print(p->next);
     cout << p->data << endl;
 }
+
+string GetNth(Node *head, int index){
+    struct Node* current = head;
+    int counter = 0;
+    while(current != NULL){
+        if(counter == index){
+            return current->data;
+        }
+        counter++;
+        current = current->next;
+    }
+}
+void deleteAll(Node** head)
+{
+     Node* current = *head;
+     Node* next;
+     while (current != NULL)
+     {
+         next = current->next;
+         delete current;
+         current = next;
+     }
+     *head = NULL;
+}
 Wallet::Wallet(string name, double bal) : username(name),balance(bal) {
 }
 
@@ -107,11 +131,37 @@ void Wallet::update_data() {
 
 void Wallet::display_record(ifstream &filen1){
     Node *head = NULL;
-    string record;
+    string record, element, choose2;
+    int choose;
+    int counter = 3;
+    bool correct = false;
+    cout << "Choose date, month or year: " << endl;
+    cin >> choose;
+    cout << "Enter the specified date: " << endl;
+    cin >> choose2;
     while(!filen1.eof()){
-        getline(filen1, record);
-        head = Insert(head, record);
+        string element;
+        for(int i = 0; i < 5; i++){
+            getline(filen1, record);
+            head = Insert(head, record);
+        }
+        element = GetNth(head,counter);
+        for(int i = 0; i < 6; i++){
+            if(element[i] == choose2[i]){
+                correct = true;
+            }
+            else{
+                correct = false;
+                break;
+            }
+        }
+        if(correct){
+            print(head);
+        }
+        deleteAll(&head);
+
     }
-    print(head);
     filen1.close();
-}
+    }
+
+
