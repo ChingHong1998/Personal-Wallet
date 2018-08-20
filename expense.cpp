@@ -75,8 +75,8 @@ void Expense::add_record(double amount, string detail, string category) {
     ofstream fout;
     fout.open("expenses.txt",ios::app);
     if(fout.good()) {
-        fout << setTime();
         fout << getID()<<"\n";
+        fout << setTime();
         fout << amount <<"\n";
         fout << detail<<"\n";
         fout << category << "\n";
