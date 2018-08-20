@@ -8,7 +8,7 @@ public:
     ~Wallet();
     void addExpense();
     void addIncome();
-    void deleteExpense(string Date);
+    void deleteExpense(string Date,ifstream &fin);
     void deleteIncome(string Date);
     void editExpense(string Date);
     void editIncome(string Date);
@@ -24,6 +24,7 @@ public:
     bool isEnough(double amount);
     void update_data();
     void display_record(ifstream &filen1);
+    void display_record(ifstream &filen1,string choose2);
 private:
     string username;
     double balance;
