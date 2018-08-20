@@ -2,55 +2,16 @@
 #include "wallet.hpp"
 #include "expense.cpp"
 #include "income.cpp"
+#include "linked_list.cpp"
 #include <fstream>
 #include <cstdlib>
+#include<stdio.h>
 
 using namespace std;
 
 /* Can create a saving wallet*/
-struct Node{
-    string data;
-    struct Node* next;
-};
-Node *Insert(Node *head, string x){
-    Node *temp = new Node();
-    temp->data = x;
-    temp->next = head;
-    head = temp;
-    return head;
-}
 
-void print(Node *p){
-    if(p == NULL){
-        return;
-    }
-    print(p->next);
-    cout << p->data << endl;
-}
 
-string GetNth(Node *head, int index){
-    struct Node* current = head;
-    int counter = 0;
-    while(current != NULL){
-        if(counter == index){
-            return current->data;
-        }
-        counter++;
-        current = current->next;
-    }
-}
-void deleteAll(Node** head)
-{
-     Node* current = *head;
-     Node* next;
-     while (current != NULL)
-     {
-         next = current->next;
-         delete current;
-         current = next;
-     }
-     *head = NULL;
-}
 Wallet::Wallet(string name, double bal) : username(name),balance(bal) {
 }
 
@@ -98,7 +59,36 @@ void Wallet::addIncome(){
     balance += amount;
     update_data();
 }
-void Wallet::deleteExpense(string Date){}
+void Wallet::deleteExpense(string Date, ifstream& fin){
+    display_record(fin,Date);
+    string id,temp,line;
+    ifstream fin1;
+    fin1.open("expenses.txt",ios::app|ios::in);
+    ofstream tempFile;
+    tempFile.open("temp.txt",ios::app|ios::out);
+    int skip=0;
+    cout << "Enter the ID you want to delete: ";
+    cin>>id;
+    while (getline(fin1, line)) {
+        if ((line != id) && !(skip > 0)) {
+           tempFile << line << endl;
+        }
+        else {
+          if(skip == 0) {
+              skip = 4;
+          }
+          else {
+              --skip;
+          }
+       }
+    }
+    system("PAUSE");
+    fin1.close();
+    tempFile.close();
+    remove("expenses.txt");
+    rename("temp.txt", "expenses.txt");
+    cout << "DELETED."<<endl;
+}
 void Wallet::deleteIncome(string Date){}
 void Wallet::editExpense(string Date){}
 void Wallet::editIncome(string Date){}
@@ -133,7 +123,7 @@ void Wallet::display_record(ifstream &filen1){
     Node *head = NULL;
     string record, element, choose2;
     int choose;
-    int counter = 3;
+    int counter = 4;
     bool correct = false;
     cout << "Choose date, month or year: " << endl;
     cin >> choose;
@@ -164,4 +154,32 @@ void Wallet::display_record(ifstream &filen1){
     filen1.close();
     }
 
+void Wallet::display_record(ifstream &filen1,string choose2){
+    Node *head = NULL;
+    string record, element;
+    int counter = 4;
+    bool correct = false;
+    while(!filen1.eof()){
+        string element;
+        for(int i = 0; i < 5; i++){
+            getline(filen1, record);
+            head = Insert(head, record);
+        }
+        element = GetNth(head,counter);
+        for(int i = 0; i < 6; i++){
+            if(element[i] == choose2[i]){
+                correct = true;
+            }
+            else{
+                correct = false;
+                break;
+            }
+        }
+        if(correct){
+            print(head);
+        }
+        deleteAll(&head);
 
+    }
+    filen1.close();
+    }
