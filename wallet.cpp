@@ -89,23 +89,13 @@ void Wallet::deleteExpense(string Date, ifstream& fin){
     rename("temp.txt", "expenses.txt");
     cout << "DELETED."<<endl;
 }
-void Wallet::deleteIncome(string Date){}
-void Wallet::editExpense(string Date){}
-void Wallet::editIncome(string Date){}
-void Wallet::search(string Date){}
-void Wallet::sort(){}
 double Wallet::displayBalance(){
     return balance;
 }
 string Wallet::displayUsername() {
     return username;
 }
-void Wallet::displaySummary(){
-}
-void Wallet::warning(){}
-void Wallet::displayChart(){}
-void Wallet::setBudget(){}
-void Wallet::changeCurrency(){}
+
 bool Wallet::isEnough(double amount) {
     return (amount < balance);
 }
@@ -183,3 +173,15 @@ void Wallet::display_record(ifstream &filen1,string choose2){
     }
     filen1.close();
     }
+
+void Wallet::deleteIncome(string Date){}
+void Wallet::editExpense(string Date){}
+void Wallet::editIncome(string Date){}
+void Wallet::search(string Date){}
+void Wallet::sort(){}
+void Wallet::displaySummary(){
+}
+void Wallet::warning(){}
+void Wallet::displayChart(){}
+void Wallet::setBudget(){}
+void Wallet::changeCurrency(){}
