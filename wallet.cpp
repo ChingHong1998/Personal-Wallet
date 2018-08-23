@@ -211,8 +211,7 @@ void Wallet::editExpense(string Date){}
 void Wallet::editIncome(string Date){}
 void Wallet::search(string Date){}
 void Wallet::sort(){}
-void Wallet::displaySummary(){
-}
+void Wallet::displaySummary(){}
 void Wallet::warning(){}
 void Wallet::displayChart(){}
 void Wallet::setBudget(){}
