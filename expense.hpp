@@ -14,13 +14,18 @@ private:
     string category;
 
 public:
-    static int counter;
-    void updateCounter();
     Expense();
     ~Expense();
     void add_record(double amount, string detail, string category);
     void remove_record(string id);
     string getID();
+    void setID(string);
+    void setAmount(string);
+    void setDetail(string);
+    void setDate(string);
+    void setCategory(string);
+    void display_category();
+    string createID();
 
 };
 

@@ -23,6 +23,7 @@ public:
     void changeCurrency();
     bool isEnough(double amount);
     void update_data();
+    void display_all_expenses();
     void display_record(ifstream &filen1);
     void display_record(ifstream &filen1,string choose2);
 private:

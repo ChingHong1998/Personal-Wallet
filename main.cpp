@@ -53,7 +53,7 @@ void display_menu() {
     fin2.open("incomes.txt", ios::in);
     system("CLS");
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
-    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \n 5. Delete Expense \nEnter Your choice: ";
+    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \n 5. Delete Expense \n 6. Display all Expenses \nEnter Your choice: ";
     int option;
     cin>> option;
     switch(option) {
@@ -76,6 +76,9 @@ void display_menu() {
         w1->deleteExpense(date,fin);
         break;
     }
+    case 6:
+        w1->display_all_expenses();
+        break;
     default:
         cout << "\nInvalid option."<<endl;
     }

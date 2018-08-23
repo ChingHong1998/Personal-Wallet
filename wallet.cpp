@@ -6,6 +6,8 @@
 #include <fstream>
 #include <cstdlib>
 #include<stdio.h>
+#include "queue.cpp"
+
 
 using namespace std;
 
@@ -25,13 +27,15 @@ void Wallet::addExpense(){
     double amount;
     cin >> amount;
     if(isEnough(amount)) {
-        cout<<"Enter the detail: ";
-        string detail;
         cin.ignore();
-        getline(cin,detail);
+        cout<<"Category : "<<endl;
+        expense->display_category();
         cout<<"Enter your category: ";
         string category;
         getline(cin,category);
+        cout<<"Enter the detail: ";
+        string detail;
+        getline(cin,detail);
         expense->add_record(amount,detail,category);
         cout << "\nAdded!";
         balance -= amount;
@@ -118,6 +122,34 @@ void Wallet::update_data() {
     remove("Wallet.txt");
     rename("temp.txt", "Wallet.txt");
 }
+
+void Wallet::display_all_expenses() {
+    ifstream fin;
+    string temp;
+    Queue q1;
+    fin.open("expenses.txt",ios::in);
+    while(getline(fin,temp)) {
+        q1.enqueue(temp);
+    }
+    while(!q1.isEmpty()) {
+        temp = q1.getFront();
+        cout<<"\tID: "<<temp<<endl;
+        q1.dequeue();
+        temp = q1.getFront();
+        cout<<"\tDate: "<<temp<<endl;
+        q1.dequeue();
+        temp = q1.getFront();
+        cout<<"\tAmount: "<<temp<<endl;
+        q1.dequeue();
+        temp = q1.getFront();
+        cout<<"\tCategory: "<<temp<<endl;
+        q1.dequeue();
+        temp = q1.getFront();
+        cout<<"\tDetail: "<<temp<<endl<<endl;
+        q1.dequeue();
+    }
+}
+
 
 void Wallet::display_record(ifstream &filen1){
     Node *head = NULL;
