@@ -25,12 +25,12 @@ void Queue::enqueue(QueueItemType newItem) {
     newNode->next = NULL;
     if(isEmpty()) {
         frontPtr = newNode;
-        backPtr = frontPtr;
     }
     else {
         backPtr->next = newNode;
-        backPtr = newNode;
+
     }
+    backPtr = newNode;
 }
 
 void Queue::dequeue(){
@@ -41,14 +41,25 @@ void Queue::dequeue(){
         cout<< "The queue is empty."<<endl;
     }
     else {
-        QueueNode* tempNode;
-        tempNode = frontPtr;
-        frontPtr = frontPtr->next;
-        delete tempNode;
+        QueueNode* tempPtr = frontPtr;
+        if(frontPtr == backPtr){
+            frontPtr = NULL;
+            backPtr = NULL;
+        }
+        else{
+            frontPtr = frontPtr->next;
+        }
+        tempPtr->next = NULL;
+        delete tempPtr;
     }
 }
 
 QueueItemType Queue::getFront() {
     // TODO: Fill in your code here
-    return frontPtr->item;
+    if(isEmpty()) {
+        cout << "Queue is Empty!"<<endl;
+        return "";
+    }
+    else
+        return frontPtr->item;
 }

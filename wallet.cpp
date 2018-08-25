@@ -5,6 +5,7 @@
 #include "linked_list.cpp"
 #include <fstream>
 #include <cstdlib>
+#include <vector>
 #include<stdio.h>
 #include "queue.cpp"
 
@@ -13,6 +14,67 @@ using namespace std;
 
 /* Can create a saving wallet*/
 
+
+//insert data to vector and return it
+vector<Expense> returnExpensesVector() {
+    ifstream fin;
+    vector<Expense> expensesVector;
+    expensesVector.clear();
+    string temp;
+    try {
+        fin.open("expenses.txt",ios::in|ios::app);
+        if (fin.bad())
+            throw &fin;
+        else {
+            while((!fin.eof()) && fin.good()) {
+                Expense expense;
+                getline(fin,temp);
+                expense.setID(temp);
+                getline(fin,temp);
+                expense.setDate(temp);
+                getline(fin,temp);
+                expense.setAmount(temp);
+                getline(fin,temp);
+                expense.setCategory(temp);
+                getline(fin,temp);
+                expense.setDetail(temp);
+                expensesVector.push_back(expense);
+            }
+            cout << "Pushed finished"<<endl;
+        }
+    }
+    catch (ifstream &x) {
+        cerr<<"Error occurs when open the file.";
+    }
+    fin.close();
+    return expensesVector;
+}
+
+//save data from vector
+void saveBack(vector<Expense> vec) {
+    ofstream fout;
+    try {
+        fout.open("temp.txt",ios::app);
+        if (fout.bad())
+            throw &fout;
+        else {
+            for(int i = 0; i<vec.size()-1;i++) {
+                fout<<vec[i].getID()<<endl;
+                fout<<vec[i].getDate()<<endl;
+                fout<<vec[i].getAmount()<<endl;
+                fout<<vec[i].getCategory()<<endl;
+                fout<<vec[i].getDetail()<<endl;
+            }
+        }
+    }
+    catch (ifstream &x) {
+        cerr<<"Error occurs when write to the file.";
+    }
+    fout.close();
+    remove("expenses.txt");
+    rename("temp.txt","expenses.txt");
+    cout<<"Save successful\n";
+}
 
 Wallet::Wallet(string name, double bal) : username(name),balance(bal) {
 }
@@ -122,22 +184,19 @@ void Wallet::display_all_expenses() {
         q1.enqueue(temp);
     }
     while(!q1.isEmpty()) {
-        temp = q1.getFront();
-        cout<<"\tID: "<<temp<<endl;
+        cout<<"\tID: "<<q1.getFront()<<endl;
+        q1.dequeue();
+        cout<<"\tDate: "<<q1.getFront()<<endl;
+        q1.dequeue();
+        cout<<"\tAmount: "<<q1.getFront()<<endl;
         q1.dequeue();
         temp = q1.getFront();
-        cout<<"\tDate: "<<temp<<endl;
+        cout<<"\tCategory: "<<q1.getFront()<<endl;
         q1.dequeue();
-        temp = q1.getFront();
-        cout<<"\tAmount: "<<temp<<endl;
-        q1.dequeue();
-        temp = q1.getFront();
-        cout<<"\tCategory: "<<temp<<endl;
-        q1.dequeue();
-        temp = q1.getFront();
-        cout<<"\tDetail: "<<temp<<endl<<endl;
+        cout<<"\tDetail: "<<q1.getFront()<<endl<<endl;
         q1.dequeue();
     }
+    fin.close();
 }
 
 
@@ -207,7 +266,44 @@ void Wallet::display_record(ifstream &filen1,string choose2){
     }
 
 void Wallet::deleteIncome(string Date){}
-void Wallet::editExpense(string Date){}
+
+void Wallet::editExpense(string Date){
+    vector <Expense> expensesVector = returnExpensesVector();
+    system("CLS");
+    ifstream fin;
+    fin.open("expenses.txt",ios::in|ios::app);
+    display_record(fin,Date);
+    fin.close();
+    cout << "Enter the ID You want to Edit: ";
+    string id;
+    getline(cin,id);
+    for(int i = 0; i<expensesVector.size()-1;i++) {
+        if(expensesVector[i].getID() == id) {
+            string date="";
+            string amount="";
+            string category="";
+            string detail="";
+            system("CLS");
+            expensesVector[i].display();
+            cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
+            cout<< "Date: ";
+            getline(cin,date);
+            cout<< "Amount: ";
+            getline(cin,amount);
+            expensesVector[i].display_category();
+            cout<< "Category: ";
+            getline(cin,category);
+            cout<< "Detail: ";
+            getline(cin,detail);
+            expensesVector[i].remake(date,amount,category,detail);
+            expensesVector[i].display();
+            break;
+        }
+    }
+    saveBack(expensesVector);
+    expensesVector.clear();
+    cout<<"Edit success";
+}
 void Wallet::editIncome(string Date){}
 void Wallet::search(string Date){}
 void Wallet::sort(){}
@@ -216,3 +312,5 @@ void Wallet::warning(){}
 void Wallet::displayChart(){}
 void Wallet::setBudget(){}
 void Wallet::changeCurrency(){}
+
+

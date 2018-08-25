@@ -46,15 +46,16 @@ Expense::Expense() {
 }
 Expense::~Expense() {}
 
-string Expense::getID() {
-    return this->ID;
-}
-
 void Expense::setID(string id) {this->ID = id;}
 void Expense::setAmount(string amount) {this->amount = toDouble(amount);}
 void Expense::setDate(string date) {this->date = date;}
 void Expense::setDetail(string detail) {this->detail = detail;}
 void Expense::setCategory(string category) {this->category = category;}
+string Expense::getID() {return this->ID;}
+string Expense::getAmount() {return tostr(this->amount);}
+string Expense::getDate() {return this->date;}
+string Expense::getDetail() {return this->detail;}
+string Expense::getCategory() {return this->category;}
 
 void Expense::add_record(double amount, string detail, string category) {
     ofstream fout;
@@ -128,5 +129,38 @@ string Expense::createID() {
     }
     c = tostr(++counter);
     return id+c;
+}
+
+void Expense::display() {
+    cout << "ID: " << getID()<<endl;
+    cout << "Date: " << getDate()<<endl;
+    cout << "Amount: " << getAmount()<<endl;
+    cout << "Category: " << getCategory()<<endl;
+    cout << "Detail: " << getDetail()<<endl;
+}
+
+void Expense::remake(string dt, string a, string cat, string dtl) {
+    if(dt != "")
+        setDate(dt);
+    if(a != "")
+        setAmount(a);
+    if(cat!= "") {
+        if(cat == "1")
+            cat = "Food";
+        else if(cat == "2")
+            cat = "Transport";
+        else if(cat == "3")
+            cat = "Clothes";
+        else if(cat == "4")
+            cat = "Accommodation";
+        else if(cat == "5")
+            cat = "Others";
+        setCategory(cat);
+    }
+    if(dtl != "")
+        setDetail(dtl);
+
+
+
 }
 

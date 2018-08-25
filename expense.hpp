@@ -18,14 +18,20 @@ public:
     ~Expense();
     void add_record(double amount, string detail, string category);
     void remove_record(string id);
-    string getID();
     void setID(string);
     void setAmount(string);
     void setDetail(string);
     void setDate(string);
     void setCategory(string);
+    string getID() ;
+    string getAmount() ;
+    string getDate() ;
+    string getDetail() ;
+    string getCategory();
     void display_category();
     string createID();
+    void display();
+    void remake(string,string,string,string);
 
 };
 
