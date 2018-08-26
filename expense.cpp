@@ -2,6 +2,9 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>
+#include <string>
+#include <iomanip>
 #include "expense.hpp"
 #include "stack.cpp"
 
@@ -23,7 +26,7 @@ string to2digit(string s) {
         return s;
 }
 
-double toDouble(string s) {
+double toDouble(const string &s) {
     stringstream ss(s);
     double result;
     ss >> result;
@@ -114,7 +117,8 @@ string Expense::createID() {
     //check date in file
     ifstream fin;
     fin.open("expenses.txt",ios::in);
-    string temp;
+    string temp,lastDigit,lastID;
+    double id1=0;
     int i =0;
     if(is_emptyf(fin)) {
         c = tostr(++counter);
@@ -122,9 +126,23 @@ string Expense::createID() {
     }
     else {
         while(getline(fin, temp)) {
+            // if lastID equal to temp
+            if(temp.substr(0,6) == lastID.substr(0,6)) {
+                id1 = toDouble(lastDigit);
+                id1+=1;
+                counter = id1;
+                // update the lastID
+                lastID = temp.substr(0,7);
+                lastDigit = temp.substr(6,1);
+                // skip the next if
+                continue;
+            }
             if(temp.substr(0,6) == id ) {
+                lastID = temp.substr(0,7);
+                lastDigit = temp.substr(6,1);
                 counter++;
             }
+
         }
     }
     c = tostr(++counter);

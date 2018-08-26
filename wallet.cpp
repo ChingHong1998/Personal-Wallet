@@ -126,34 +126,22 @@ void Wallet::addIncome(){
     update_data();
 }
 void Wallet::deleteExpense(string Date, ifstream& fin){
+    vector<Expense> expensesVector = returnExpensesVector();
+    string id;
     display_record(fin,Date);
-    string id,temp,line;
-    ifstream fin1;
-    fin1.open("expenses.txt",ios::app|ios::in);
-    ofstream tempFile;
-    tempFile.open("temp.txt",ios::app|ios::out);
-    int skip=0;
-    cout << "Enter the ID you want to delete: ";
-    cin>>id;
-    while (getline(fin1, line)) {
-        if ((line != id) && !(skip > 0)) {
-           tempFile << line << endl;
+    cout << "Enter the ID You want to delete: ";
+    cin.get();
+    getline(cin,id);
+    for(int i = 0; i< expensesVector.size()-1;i++) {
+        if(id == expensesVector[i].getID()) {
+            expensesVector.erase(expensesVector.begin()+i);
+            break;
         }
-        else {
-          if(skip == 0) {
-              skip = 4;
-          }
-          else {
-              --skip;
-          }
-       }
     }
-    system("PAUSE");
-    fin1.close();
-    tempFile.close();
-    remove("expenses.txt");
-    rename("temp.txt", "expenses.txt");
-    cout << "DELETED."<<endl;
+    saveBack(expensesVector);
+    expensesVector.clear();
+    cout << "Deleted.\n";
+
 }
 double Wallet::displayBalance(){
     return balance;
