@@ -196,17 +196,27 @@ void Wallet::display_record(ifstream &filen1){
     bool correct = false;
     cout << "Choose date, month or year: " << endl;
     cin >> choose;
-    cout << "Enter the specified date: " << endl;
+    cout << "Enter the specified date/ month/ year: " << endl;
     cin >> choose2;
     while(!filen1.eof()){
         string element;
         for(int i = 0; i < 5; i++){
             getline(filen1, record);
+            if(record == "" || record == "\n"){
+                break;
+            }
             head = Insert(head, record);
         }
         element = GetNth(head,counter);
-        for(int i = 0; i < 6; i++){
-            if(element[i] == choose2[i]){
+        int k = 0;
+        if(choose == 2){
+            k = 2;
+        }
+        if(choose == 3){
+            k = 4;
+        }
+        for(int i = 0; i < choose2.length() ; i++, k++){
+            if(element[k] == choose2[i]){
                 correct = true;
             }
             else{
@@ -218,10 +228,10 @@ void Wallet::display_record(ifstream &filen1){
             print(head);
         }
         deleteAll(&head);
-
     }
     filen1.close();
-    }
+}
+
 
 void Wallet::display_record(ifstream &filen1,string choose2){
     Node *head = NULL;
