@@ -76,7 +76,7 @@ void saveBack(vector<Expense> vec) {
     cout<<"Save successful\n";
 }
 
-Wallet::Wallet(string name, double bal) : username(name),balance(bal) {
+Wallet::Wallet(string name, double bal,double bud) : username(name),balance(bal),budget(bud) {
 }
 
 Wallet::~Wallet() {
@@ -158,6 +158,7 @@ void Wallet::update_data() {
     temp.open("temp.txt", ios::app|ios::in);
     temp << "Username: " << username<<endl;
     temp << "Balance: " << balance<<endl;
+    temp << "Budget: " << budget<<endl;
     temp.close();
     remove("Wallet.txt");
     rename("temp.txt", "Wallet.txt");
@@ -228,10 +229,9 @@ void Wallet::display_record(ifstream &filen1){
             print(head);
         }
         deleteAll(&head);
-    }
-    filen1.close();
 }
-
+    filen1.close();
+    }
 
 void Wallet::display_record(ifstream &filen1,string choose2){
     Node *head = NULL;
@@ -261,7 +261,7 @@ void Wallet::display_record(ifstream &filen1,string choose2){
 
     }
     filen1.close();
-    }
+}
 
 void Wallet::deleteIncome(string Date){}
 
@@ -302,13 +302,20 @@ void Wallet::editExpense(string Date){
     expensesVector.clear();
     cout<<"Edit success";
 }
-void Wallet::editIncome(string Date){}
-void Wallet::search(string Date){}
 void Wallet::sort(){}
 void Wallet::displaySummary(){}
-void Wallet::warning(){}
+void Wallet::warning(){
+    if(this->balance < this->budget)
+        cout << "***********WARNING*************"<<endl;
+        cout << "Your Balance is under the budget you set, which is "<<this->budget<<endl<<endl;
+}
 void Wallet::displayChart(){}
-void Wallet::setBudget(){}
+void Wallet::setBudget(){
+    cout<< "Enter your budget(It will show warning message when your balance below budget): ";
+    cin >> budget;
+}
+
+string Wallet::getBudget() { return tostr(this->budget);}
 void Wallet::changeCurrency(){}
 
 
