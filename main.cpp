@@ -21,14 +21,19 @@ int main() {
         cout << "Enter your balance in your wallet: ";
         double balance;
         cin>> balance;
-        w1 = new Wallet(username,balance);
+        cout<< "Enter your budget(It will show warning message when your balance below budget): ";
+        double budget;
+        cin >> budget;
+        w1 = new Wallet(username,balance,budget);
         fout << "Username: "<< username <<endl;
         fout << "Balance: " << balance <<endl;
+        fout << "Budget: " << w1->getBudget() << endl;
         fout.close();
     }
     else {
         string username = "";
-        double balance;
+        string balance="";
+        string budget = "";
         while(!fin.eof()&& (fin.good()))
         {
             string temp;
@@ -36,11 +41,16 @@ int main() {
             for(int i = 10; i< temp.length(); i++) {
                 username += temp[i];
             }
-            fin >> temp;
-            stringstream ss(temp);
-            ss >> balance;
+            getline(fin,temp);
+            for(int i = 9; i< temp.length(); i++) {
+                balance += temp[i];
+            }
+            getline(fin,temp);
+            for(int i = 8; i< temp.length(); i++) {
+                budget += temp[i];
+            }
         }
-        w1 = new Wallet(username,balance);
+        w1 = new Wallet(username,toDouble(balance),toDouble(budget));
     }
     fin.close();
     display_menu();
@@ -53,6 +63,7 @@ void display_menu() {
     fin2.open("incomes.txt", ios::in);
     system("CLS");
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
+    w1->warning();
     cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \n 5. Delete Expense \n 6. Display all Expenses \n 7. Edit Expense\nEnter Your choice: ";
     int option;
     cin>> option;
