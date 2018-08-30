@@ -4,7 +4,7 @@
 using namespace std;
 class Wallet {
 public:
-    Wallet(string name, double bal);
+    Wallet(string name, double bal,double bud);
     ~Wallet();
     void addExpense();
     void addIncome();
@@ -26,9 +26,11 @@ public:
     void display_all_expenses();
     void display_record(ifstream &filen1);
     void display_record(ifstream &filen1,string choose2);
+    string getBudget();
 private:
     string username;
     double balance;
+    double budget;
 };
 
 #endif // WALLET_H
