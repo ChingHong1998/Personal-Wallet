@@ -64,7 +64,8 @@ void display_menu() {
     system("CLS");
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
     w1->warning();
-    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \n 5. Delete Expense \n 6. Display all Expenses \n 7. Edit Expense\nEnter Your choice: ";
+    cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \n 5. Delete Expense \n";
+    cout << " 6. Display all Expenses \n 7. Edit Expense\n 8. Show summary\nEnter Your choice: ";
     int option;
     cin>> option;
     switch(option) {
@@ -99,6 +100,9 @@ void display_menu() {
         w1->editExpense(date);
         break;
     }
+    case 8:
+        w1->displaySummary();
+        break;
     default:
         cout << "\nInvalid option."<<endl;
     }

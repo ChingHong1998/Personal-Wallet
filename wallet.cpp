@@ -303,11 +303,189 @@ void Wallet::editExpense(string Date){
     cout<<"Edit success";
 }
 void Wallet::sort(){}
-void Wallet::displaySummary(){}
+void Wallet::displaySummary(){
+    string fromDate,toDate;
+    Queue dateQueue;
+    double food=0;
+    double transport=0;
+    double clothes=0;
+    double accommodation=0;
+    double others=0;
+    int choice;
+    vector<Expense> expensesVector = returnExpensesVector();
+    cout << "What kinds of summary:\n\t1. Daily\n\t2. Monthly\n\t3. Yearly\n\t4. Certain Period\nYour choice: ";
+    cin >> choice;
+    switch(choice) {
+    case 1: {
+        cout << "Daily summary\n";
+        string lastDate,lastDay;
+
+        int i =0;
+        for(lastDay= (expensesVector[i].getID().substr(0,6));i < expensesVector.size(); i++) {
+            if((expensesVector[i].getID().substr(0,6)) == lastDay) {
+                lastDate = expensesVector[i].getDate().substr(0,10) + " " + expensesVector[i].getDate().substr(20,4);
+                if(expensesVector[i].getCategory() == "Food")
+                    food += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Transport")
+                    transport += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Clothes")
+                    clothes += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Accommodation")
+                    accommodation += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Others")
+                    others += toDouble(expensesVector[i].getAmount());
+                continue;
+            }
+            else {
+                cout << "\nDate: " << lastDate <<endl;
+                cout << "\tFood: " << food << endl;
+                cout << "\tTransport: " << transport << endl;
+                cout << "\tClothes: " << clothes << endl;
+                cout << "\tAccommodation: " << accommodation << endl;
+                cout << "\tOthers: " << others << endl;
+                food=0;
+                transport=0;
+                clothes=0;
+                accommodation=0;
+                others=0;
+                lastDay = (expensesVector[i].getID().substr(0,6));
+                if(expensesVector[i].getCategory() == "Food")
+                    food += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Transport")
+                    transport += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Clothes")
+                    clothes += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Accommodation")
+                    accommodation += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Others")
+                    others += toDouble(expensesVector[i].getAmount());
+                continue;
+            }
+
+        }
+        cout << "\nDate: " << lastDate <<endl;
+        cout << "\tFood: " << food << endl;
+        cout << "\tTransport: " << transport << endl;
+        cout << "\tClothes: " << clothes << endl;
+        cout << "\tAccommodation: " << accommodation << endl;
+        cout << "\tOthers: " << others << endl;
+        break;
+        }
+    case 2:{
+        cout << "Monthly summary\n";
+        string lastMonth,lastDate;
+        int i =0;
+        for(lastMonth= expensesVector[i].getID().substr(2,4);i < expensesVector.size(); i++) {
+            if(expensesVector[i].getID().substr(2,4) == lastMonth) {
+                lastDate = expensesVector[i].getDate().substr(4,3) + " " + expensesVector[i].getDate().substr(20,4);
+                if(expensesVector[i].getCategory() == "Food")
+                    food += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Transport")
+                    transport += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Clothes")
+                    clothes += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Accommodation")
+                    accommodation += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Others")
+                    others += toDouble(expensesVector[i].getAmount());
+                continue;
+            }
+            else {
+                cout << "\nDate: " << lastDate <<endl;
+                cout << "\tFood: " << food << endl;
+                cout << "\tTransport: " << transport << endl;
+                cout << "\tClothes: " << clothes << endl;
+                cout << "\tAccommodation: " << accommodation << endl;
+                cout << "\tOthers: " << others << endl;
+                food=0;
+                transport=0;
+                clothes=0;
+                accommodation=0;
+                others=0;
+                lastMonth = expensesVector[i].getID().substr(2,4);
+                if(expensesVector[i].getCategory() == "Food")
+                    food += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Transport")
+                    transport += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Clothes")
+                    clothes += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Accommodation")
+                    accommodation += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Others")
+                    others += toDouble(expensesVector[i].getAmount());
+                continue;
+            }
+        }
+        cout << "\nDate: " << lastDate <<endl;
+        cout << "\tFood: " << food << endl;
+        cout << "\tTransport: " << transport << endl;
+        cout << "\tClothes: " << clothes << endl;
+        cout << "\tAccommodation: " << accommodation << endl;
+        cout << "\tOthers: " << others << endl;
+        break;
+        }
+    case 3: {
+        cout << "Yearly summary\n";
+        string lastMonth,lastDate;
+        int i =0;
+        for(lastMonth= expensesVector[i].getID().substr(4,2);i < expensesVector.size(); i++) {
+            if(expensesVector[i].getID().substr(4,2) == lastMonth) {
+                lastDate = expensesVector[i].getDate().substr(20,4);
+                if(expensesVector[i].getCategory() == "Food")
+                    food += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Transport")
+                    transport += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Clothes")
+                    clothes += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Accommodation")
+                    accommodation += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Others")
+                    others += toDouble(expensesVector[i].getAmount());
+                continue;
+            }
+            else {
+                cout << "\nDate: " << lastDate <<endl;
+                cout << "\tFood: " << food << endl;
+                cout << "\tTransport: " << transport << endl;
+                cout << "\tClothes: " << clothes << endl;
+                cout << "\tAccommodation: " << accommodation << endl;
+                cout << "\tOthers: " << others << endl;
+                food=0;
+                transport=0;
+                clothes=0;
+                accommodation=0;
+                others=0;
+                lastMonth = expensesVector[i].getID().substr(4,2);
+                if(expensesVector[i].getCategory() == "Food")
+                    food += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Transport")
+                    transport += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Clothes")
+                    clothes += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Accommodation")
+                    accommodation += toDouble(expensesVector[i].getAmount());
+                else if(expensesVector[i].getCategory() == "Others")
+                    others += toDouble(expensesVector[i].getAmount());
+                continue;
+            }
+        }
+        cout << "\nDate: " << lastDate <<endl;
+        cout << "\tFood: " << food << endl;
+        cout << "\tTransport: " << transport << endl;
+        cout << "\tClothes: " << clothes << endl;
+        cout << "\tAccommodation: " << accommodation << endl;
+        cout << "\tOthers: " << others << endl;
+        break;
+        }
+    default:
+        cout<< "Invalid Option" <<endl;
+    }
+}
 void Wallet::warning(){
-    if(this->balance < this->budget)
+    if(this->balance < this->budget) {
         cout << "***********WARNING*************"<<endl;
         cout << "Your Balance is under the budget you set, which is "<<this->budget<<endl<<endl;
+    }
 }
 void Wallet::displayChart(){}
 void Wallet::setBudget(){

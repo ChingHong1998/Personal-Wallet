@@ -1,0 +1,80 @@
+0109181
+Sat Sep 01 23:50:36 2018
+44
+Food
+lunch
+0109182
+Sat Sep 01 23:50:52 2018
+50
+Clothes
+padini
+0109183
+Sat Sep 01 23:51:05 2018
+20
+Transport
+grabcar
+0109184
+Sat Sep 01 23:51:21 2018
+66
+Accommodation
+maintenance
+0109185
+Sat Sep 01 23:51:42 2018
+99
+Others
+secrect
+0109186
+Sat Sep 01 23:52:02 2018
+30
+Food
+dinner
+0109187
+Sat Sep 01 23:52:15 2018
+33
+Clothes
+jeans
+0109188
+Sat Sep 01 23:52:35 2018
+33
+Others
+gg
+0209181
+Sun Sep 02 23:53:50 2018
+12
+Food
+breakfast
+0209182
+Sun Sep 02 23:54:10 2018
+23
+Transport
+bus
+0209183
+Sun Sep 02 23:54:41 2018
+56
+Accommodation
+pillow
+0209184
+Sun Sep 02 23:54:56 2018
+99
+Others
+hhhh
+0210181
+Sun Oct 02 23:53:50 2018
+12
+Food
+breakfast
+0210182
+Sun Oct 02 23:54:10 2018
+23
+Transport
+bus
+0210183
+Sun Oct 02 23:54:41 2018
+56
+Accommodation
+pillow
+0210184
+Sun Oct 02 23:54:56 2018
+99
+Others
+hhhh
