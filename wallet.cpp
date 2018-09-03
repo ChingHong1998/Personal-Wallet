@@ -158,7 +158,7 @@ void processSummary(string type) {
     expensesVector.clear();
 }
 
-Wallet::Wallet(string name, double bal,double bud) : username(name),balance(bal),budget(bud) {
+Wallet::Wallet(string name, double bal,double bud,string cur) : username(name),balance(bal),budget(bud),currency(cur) {
 }
 
 Wallet::~Wallet() {
@@ -167,7 +167,7 @@ Wallet::~Wallet() {
 
 void Wallet::addExpense(){
     Expense * expense = new Expense;
-    cout<<"Enter your amount: ";
+    cout<<"Enter your amount "<<getCurrency()<<":"<<endl;
     double amount;
     cin >> amount;
     if(isEnough(amount)) {
@@ -192,7 +192,7 @@ void Wallet::addExpense(){
 
 void Wallet::addIncome(){
     Income * income = new Income;
-    cout<<"Enter your amount: ";
+    cout<<"Enter your amount "<<getCurrency()<<":"<<endl;;
     double amount;
     cin >> amount;
     cin.ignore();
@@ -241,6 +241,7 @@ void Wallet::update_data() {
     temp << "Username: " << username<<endl;
     temp << "Balance: " << balance<<endl;
     temp << "Budget: " << budget<<endl;
+    temp << "Currency: " << currency <<endl;
     temp.close();
     remove("Wallet.txt");
     rename("temp.txt", "Wallet.txt");
@@ -410,7 +411,7 @@ void Wallet::displaySummary(){
 void Wallet::warning(){
     if(this->balance < this->budget) {
         cout << "***********WARNING*************"<<endl;
-        cout << "Your Balance is under the budget you set, which is "<<this->budget<<endl<<endl;
+        cout << "Your Balance is under the budget you set, which is "<<"Enter your amount:"<<getCurrency()<<" "<<this->budget<<endl<<endl;
     }
 }
 void Wallet::displayChart(){}
@@ -421,6 +422,9 @@ void Wallet::setBudget(){
 
 string Wallet::getBudget() { return tostr(this->budget);}
 
-void Wallet::changeCurrency(){}
+void Wallet::changeCurrency(){
 
+
+}
+string Wallet::getCurrency(){return this->currency;}
 
