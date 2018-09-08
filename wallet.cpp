@@ -56,11 +56,11 @@ vector<Expense> returnExpensesVector() {
 void saveBack(vector<Expense> vec) {
     ofstream fout;
     try {
-        fout.open("temp.txt",ios::app);
+        fout.open("temp.txt",ios::app | ios::out);
         if (fout.bad())
             throw &fout;
         else {
-            for(int i = 0; i<vec.size()-1;i++) {
+            for(int i = 0; i<vec.size();i++) {
                 fout<<vec[i].getID()<<endl;
                 fout<<vec[i].getDate()<<endl;
                 fout<<vec[i].getAmount()<<endl;
@@ -74,10 +74,56 @@ void saveBack(vector<Expense> vec) {
     }
     fout.close();
     remove("expenses.txt");
-    rename("temp.txt","expenses.txt");
+    rename("temp.txt", "expenses.txt");
     cout<<"Save successful\n";
 }
 
+void merge(vector <Expense>& theArray, int first, int mid, int last ){
+    vector <Expense> s = returnExpensesVector();
+    int first1 = first;
+    int last1 = mid;
+    int first2 = mid+1;
+    int last2 = last;
+
+    int index;
+    for(index=first; (first1<=last1) && (first2<=last2);++index) {
+        if(toDouble(theArray[first1].getAmount()) < toDouble(theArray[first2].getAmount())) {
+            s[index] = theArray[first1];
+            ++first1;
+        }
+        else {
+            s[index] = theArray[first2];
+            ++first2;
+        }
+    }
+
+    while(first1 <=last1) {
+        s[index] = theArray[first1];
+        ++first1;
+        ++index;
+    }
+
+    while(first2<=last2) {
+        s[index] = theArray[first2];
+        ++first2;
+        ++index;
+    }
+
+    for(index=first;index<=last;++index){
+        theArray[index] = s[index];
+    }
+}
+
+void mergeSort(vector <Expense> &theArray, int first, int last){
+   //To do: Recursively call the mergeSort to split then use
+   //       the merge function to combine and sort the halves
+   if(first < last) {
+        int mid = (first+last)/2;
+        mergeSort(theArray,first,mid);
+        mergeSort(theArray, mid + 1, last);
+        merge(theArray,first,mid,last);
+   }
+}
 void processSummary(string type) {
     vector<Expense> expensesVector = returnExpensesVector();
     double food=0;
@@ -158,7 +204,7 @@ void processSummary(string type) {
     expensesVector.clear();
 }
 
-Wallet::Wallet(string name, double bal,double bud,string cur) : username(name),balance(bal),budget(bud),currency(cur) {
+Wallet::Wallet(string name, double bal,double bud) : username(name),balance(bal),budget(bud) {
 }
 
 Wallet::~Wallet() {
@@ -167,7 +213,7 @@ Wallet::~Wallet() {
 
 void Wallet::addExpense(){
     Expense * expense = new Expense;
-    cout<<"Enter your amount "<<getCurrency()<<":"<<endl;
+    cout<<"Enter your amount: ";
     double amount;
     cin >> amount;
     if(isEnough(amount)) {
@@ -192,7 +238,7 @@ void Wallet::addExpense(){
 
 void Wallet::addIncome(){
     Income * income = new Income;
-    cout<<"Enter your amount "<<getCurrency()<<":"<<endl;;
+    cout<<"Enter your amount: ";
     double amount;
     cin >> amount;
     cin.ignore();
@@ -241,7 +287,6 @@ void Wallet::update_data() {
     temp << "Username: " << username<<endl;
     temp << "Balance: " << balance<<endl;
     temp << "Budget: " << budget<<endl;
-    temp << "Currency: " << currency <<endl;
     temp.close();
     remove("Wallet.txt");
     rename("temp.txt", "Wallet.txt");
@@ -385,7 +430,11 @@ void Wallet::editExpense(string Date){
     expensesVector.clear();
     cout<<"Edit success";
 }
-void Wallet::sort(){}
+void Wallet::sort(){
+        vector <Expense> expensesVector = returnExpensesVector();
+        mergeSort(expensesVector, 0, expensesVector.size()- 1);
+        saveBack(expensesVector);
+}
 void Wallet::displaySummary(){
 
     int choice;
@@ -411,7 +460,7 @@ void Wallet::displaySummary(){
 void Wallet::warning(){
     if(this->balance < this->budget) {
         cout << "***********WARNING*************"<<endl;
-        cout << "Your Balance is under the budget you set, which is "<<"Enter your amount:"<<getCurrency()<<" "<<this->budget<<endl<<endl;
+        cout << "Your Balance is under the budget you set, which is "<<this->budget<<endl<<endl;
     }
 }
 void Wallet::displayChart(){}
@@ -422,9 +471,6 @@ void Wallet::setBudget(){
 
 string Wallet::getBudget() { return tostr(this->budget);}
 
-void Wallet::changeCurrency(){
+void Wallet::changeCurrency(){}
 
-
-}
-string Wallet::getCurrency(){return this->currency;}
 
