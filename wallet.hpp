@@ -12,8 +12,9 @@ public:
     void deleteIncome(string Date);
     void editExpense(string Date);
     void editIncome(string Date);
-    void search(string Date);
-    void sort();
+    void search();
+    void search2();
+    void sort(int sort_choice);
     double displayBalance();
     string displayUsername();
     void displaySummary();
