@@ -78,7 +78,7 @@ void saveBack(vector<Expense> vec) {
     cout<<"Save successful\n";
 }
 
-void merge(vector <Expense>& theArray, int first, int mid, int last ){
+void merge(vector <Expense>& theArray, int first, int mid, int last, int choice ){
     vector <Expense> s = returnExpensesVector();
     int first1 = first;
     int last1 = mid;
@@ -87,13 +87,24 @@ void merge(vector <Expense>& theArray, int first, int mid, int last ){
 
     int index;
     for(index=first; (first1<=last1) && (first2<=last2);++index) {
-        if(toDouble(theArray[first1].getAmount()) < toDouble(theArray[first2].getAmount())) {
-            s[index] = theArray[first1];
-            ++first1;
-        }
-        else {
-            s[index] = theArray[first2];
-            ++first2;
+        if(choice == 1){
+            if(toDouble(theArray[first1].getAmount()) < toDouble(theArray[first2].getAmount())) {
+                s[index] = theArray[first1];
+                ++first1;
+            }
+            else {
+                s[index] = theArray[first2];
+                ++first2;
+            }
+        }else if(choice == 2){
+            if(toDouble(theArray[first1].getAmount()) > toDouble(theArray[first2].getAmount())) {
+                s[index] = theArray[first1];
+                ++first1;
+            }
+            else {
+                s[index] = theArray[first2];
+                ++first2;
+            }
         }
     }
 
@@ -114,15 +125,42 @@ void merge(vector <Expense>& theArray, int first, int mid, int last ){
     }
 }
 
-void mergeSort(vector <Expense> &theArray, int first, int last){
-   //To do: Recursively call the mergeSort to split then use
-   //       the merge function to combine and sort the halves
+void mergeSort(vector <Expense> &theArray, int first, int last, int choice){
    if(first < last) {
         int mid = (first+last)/2;
-        mergeSort(theArray,first,mid);
-        mergeSort(theArray, mid + 1, last);
-        merge(theArray,first,mid,last);
+        mergeSort(theArray,first,mid,choice);
+        mergeSort(theArray, mid + 1, last, choice);
+        merge(theArray,first,mid,last,choice);
    }
+}
+int leftmost(vector <Expense> array, int min, int max, int value)
+{
+    if (min == max){
+        return min;
+    }
+    int mid = (min + max) / 2;
+
+    if (toDouble(array[mid].getAmount()) < value) {
+        return leftmost(array, mid + 1, max, value);
+    }
+    else{
+        return leftmost(array, min, mid, value);
+    }
+}
+
+int rightmost(vector <Expense> array, int min, int max, int value)
+{
+    if (min == max){
+        return min;
+    }
+    int mid = (min + max + 1) / 2;
+
+    if (toDouble(array[mid].getAmount()) > value){
+        return rightmost(array, min, mid - 1, value);
+    }
+    else{
+        return rightmost(array, mid, max, value);
+    }
 }
 void processSummary(string type) {
     vector<Expense> expensesVector = returnExpensesVector();
@@ -391,7 +429,6 @@ void Wallet::display_record(ifstream &filen1,string choose2){
     filen1.close();
 }
 
-void Wallet::deleteIncome(string Date){}
 
 void Wallet::editExpense(string Date){
     vector <Expense> expensesVector = returnExpensesVector();
@@ -430,9 +467,9 @@ void Wallet::editExpense(string Date){
     expensesVector.clear();
     cout<<"Edit success";
 }
-void Wallet::sort(){
+void Wallet::sort(int sort_choice){
         vector <Expense> expensesVector = returnExpensesVector();
-        mergeSort(expensesVector, 0, expensesVector.size()- 1);
+        mergeSort(expensesVector, 0, expensesVector.size()- 1, sort_choice);
         saveBack(expensesVector);
 }
 void Wallet::displaySummary(){
@@ -468,7 +505,53 @@ void Wallet::setBudget(){
     cout<< "Enter your budget(It will show warning message when your balance below budget): ";
     cin >> budget;
 }
-
+void Wallet::search(){
+    string start_pt, end_pt;
+    int start = 0, ending = 0;
+    cout << "Enter the date you want to search in [DDMMYY]: \nFrom: ";
+    cin >> start_pt;
+    start_pt = start_pt + "1";
+    cout << "Until: ";
+    cin >> end_pt;
+    vector <Expense> vec = returnExpensesVector();
+    for(int i = 0; i < vec.size(); i++){
+        string temp = vec[i].getID();
+        if(temp == start_pt){
+            start = i;
+        }
+    }
+    for(int i = 0; i < vec.size(); i++){
+        string temp = vec[i].getID();
+        if(temp.substr(0,6) == end_pt){
+            ending = i;
+        }
+    }
+    for(int i = start; i <= ending; i++){
+        cout << vec[i].getID() << endl;
+        cout << vec[i].getDate() << endl;
+        cout << vec[i].getAmount() << endl;
+        cout << vec[i].getCategory() << endl;
+        cout << vec[i].getDetail() << endl;
+    }
+}
+void Wallet::search2(){
+    sort(1);
+    vector <Expense> vec = returnExpensesVector();
+    cout << "Enter the amount you want to search: \n From: ";
+    int start_amount, end_amount, start, ending;
+    cin >> start_amount;
+    cout << "Until: ";
+    cin >> end_amount;
+    start = leftmost(vec, 0, vec.size() - 1, start_amount);
+    ending = rightmost(vec, 0, vec.size() - 1, end_amount);
+    for(int i = start; i <= ending; i++){
+        cout << vec[i].getID() << endl;
+        cout << vec[i].getDate() << endl;
+        cout << vec[i].getAmount() << endl;
+        cout << vec[i].getCategory() << endl;
+        cout << vec[i].getDetail() << endl;
+    }
+}
 string Wallet::getBudget() { return tostr(this->budget);}
 
 void Wallet::changeCurrency(){}
