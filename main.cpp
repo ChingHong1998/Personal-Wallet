@@ -65,7 +65,7 @@ void display_menu() {
     cout << "Welcome to Personal Wallet.\n"<<w1->displayUsername()<<" current balance is "<< w1->displayBalance() <<endl;
     w1->warning();
     cout << "Menu: \n 1. Add Expense. \n 2. Add Income \n 3. Display Expense \n 4. Display Income \n 5. Delete Expense \n";
-    cout << " 6. Display all Expenses \n 7. Edit Expense\n 8. Show summary\nEnter Your choice: ";
+    cout << " 6. Display all Expenses \n 7. Edit Expense\n 8. Show summary\n 9. Sort All Record \nEnter Your choice: ";
     int option;
     cin>> option;
     switch(option) {
@@ -97,7 +97,7 @@ void display_menu() {
         cin.get();
         getline(cin,date);
         fin.close();
-        w1->sort();
+        w1->editExpense(date);
         break;
     }
     case 8:
@@ -105,7 +105,28 @@ void display_menu() {
         break;
     case 9:
         fin.close();
-        w1->sort();
+        cout << "Sort All Record According to: ";
+        cout << "1) Ascending Order (Amount) \n 2) Descending Order(Amount) \n";
+        cout << "3) Ascending Order (Date) \n 4) Descending Order(Date) \n";
+        int sort_choice;
+        cin >> sort_choice;
+        w1->sort(sort_choice);
+        break;
+    case 0:
+        fin.close();
+        cout << "Search: \n 1)Amount \n 2)Date " << endl;
+        int choice3;
+        cin >> choice3;
+        switch(choice3){
+            case 1:
+                w1->search2();
+                break;
+            case 2:
+                w1->search();
+                break;
+            default:
+                cout << "Invalid" << endl;
+        }
         break;
     default:
         cout << "\nInvalid option."<<endl;
