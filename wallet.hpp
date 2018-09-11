@@ -15,6 +15,7 @@ public:
     void search();
     void search2();
     void sort(int sort_choice);
+    void sort2(int sort_choice);
     double displayBalance();
     string displayUsername();
     void displaySummary();
