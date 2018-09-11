@@ -17,7 +17,7 @@ int main() {
         fout.open("Wallet.txt",ios::app);
         cout<< "Create a wallet.\nEnter your username: ";
         string username;
-        cin >> username;
+        getline(cin, username);
         cout << "Enter your balance in your wallet: ";
         double balance;
         cin>> balance;
@@ -110,7 +110,20 @@ void display_menu() {
         cout << "3) Ascending Order (Date) \n 4) Descending Order(Date) \n";
         int sort_choice;
         cin >> sort_choice;
-        w1->sort(sort_choice);
+        switch(sort_choice){
+            case 1:
+                w1->sort(sort_choice);
+                break;
+            case 2:
+                w1->sort(sort_choice);
+                break;
+            case 3:
+                w1->sort2(sort_choice);
+                break;
+            case 4:
+                w1->sort2(sort_choice);
+                break;
+        }
         break;
     case 0:
         fin.close();
