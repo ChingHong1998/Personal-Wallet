@@ -472,6 +472,60 @@ void Wallet::sort(int sort_choice){
         mergeSort(expensesVector, 0, expensesVector.size()- 1, sort_choice);
         saveBack(expensesVector);
 }
+void Wallet::sort2(int sort_choice){
+    vector <Expense> expensesVector = returnExpensesVector();
+    Expense temparr[1];
+    double year1, month1, date1, id1, year2, month2, date2, id2;
+    for(int i = 0; i < expensesVector.size() - 1; i++){
+        for(int x = 0; x < expensesVector.size() - 1; x++){
+            year1 = toDouble(expensesVector[x].getID().substr(4,2)); year2 = toDouble(expensesVector[x+1].getID().substr(4,2));
+            month1 = toDouble(expensesVector[x].getID().substr(2,2)); month2 = toDouble(expensesVector[x+1].getID().substr(2,2));
+            date1 = toDouble(expensesVector[x].getID().substr(0,2)); date2 = toDouble(expensesVector[x+1].getID().substr(0,2));
+            id1 = toDouble(expensesVector[x].getID().substr(6,1)); id2 = toDouble(expensesVector[x+1].getID().substr(6,1));
+                if(sort_choice == 3){
+                    if((year1 < year2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }else if((year1 == year2) && (month1 < month2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }else if((year1 == year2) && (month1 == month2) && (date1 < date2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }else if((year1 == year2) && (month1 == month2) && (date1 == date2) && (id1 < id2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }
+                }
+                if(sort_choice == 4){
+                    if((year1 > year2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }else if((year1 == year2) && (month1 > month2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }else if((year1 == year2) && (month1 == month2) && (date1 > date2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }else if((year1 == year2) && (month1 == month2) && (date1 == date2) && (id1 > id2)){
+                        temparr[0] = expensesVector[x+1];
+                        expensesVector[x+1] = expensesVector[x];
+                        expensesVector[x] = temparr[0];
+                    }
+                }
+            }
+        }
+        saveBack(expensesVector);
+        expensesVector.clear();
+        cout << "Sorted" << endl;
+}
 void Wallet::displaySummary(){
 
     int choice;
