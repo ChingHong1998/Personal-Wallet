@@ -141,6 +141,9 @@ void display_menu() {
                 cout << "Invalid" << endl;
         }
         break;
+    case 11:
+        w1->displayChart();
+        break;
     default:
         cout << "\nInvalid option."<<endl;
     }
