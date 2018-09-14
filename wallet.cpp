@@ -8,7 +8,7 @@
 #include <vector>
 #include<stdio.h>
 #include "queue.cpp"
-
+#include <iomanip>
 
 using namespace std;
 
@@ -554,7 +554,6 @@ void Wallet::warning(){
         cout << "Your Balance is under the budget you set, which is "<<this->budget<<endl<<endl;
     }
 }
-void Wallet::displayChart(){}
 void Wallet::setBudget(){
     cout<< "Enter your budget(It will show warning message when your balance below budget): ";
     cin >> budget;
@@ -606,8 +605,92 @@ void Wallet::search2(){
         cout << vec[i].getDetail() << endl;
     }
 }
+void Wallet::displayChart(){
+    system("cls");
+    string x[5] = {"Food", "Transport", "Clothes", "Accommodation", "Others"};
+    vector <Expense> vec = returnExpensesVector();
+    int total = 0, first = 0, second = 0, third = 0, forth = 0, fifth = 0;
+    for(int i = 0; i < vec.size(); i++){
+        if(vec[i].getCategory() == x[0]){
+            first += toDouble(vec[i].getAmount());
+        }else if(vec[i].getCategory() == x[1]){
+            second += toDouble(vec[i].getAmount());
+        }else if(vec[i].getCategory() == x[2]){
+            third += toDouble(vec[i].getAmount());
+        }else if(vec[i].getCategory() == x[3]){
+            forth += toDouble(vec[i].getAmount());
+        }else if(vec[i].getCategory() == x[4]){
+            fifth += toDouble(vec[i].getAmount());
+        }
+        total += toDouble(vec[i].getAmount());
+    }
+    int arr_all[5] = {first, second, third, forth, fifth};
+    int highest = arr_all[0];
+    for(int i = 0; i < 5; i++){
+        if(arr_all[i] > highest){
+            highest = arr_all[i];
+        }
+    }
+    int dividen;
+    if(highest < 50){
+        dividen = 1;
+    }else if(highest < 100){
+        dividen = 5;
+    }else if(highest < 500){
+        dividen = 10;
+    }else if(highest < 1000){
+        dividen = 50;
+    }else if(highest < 5000){
+        dividen = 100;
+    }else if(highest < 10000){
+        dividen = 500;
+    }else{
+        dividen = 1000;
+    }
+    highest = highest / dividen;
+    int max_point = highest * dividen;
+    int min_point = max_point - dividen;
+    for(int i = 0; i < 5; i++){
+        arr_all[i] = (arr_all[i] / dividen);
+        if(arr_all[i] == 0){
+            arr_all[i] = 1;
+        }
+    }
+    cout << "@ represents " << dividen << " units" << endl;
+    cout << "F = Food" << endl;
+    cout << "T = Transport" << endl;
+    cout << "C = Clothes" << endl;
+    cout << "A = Accommodation" << endl;
+    cout << "O = Others" <<endl;
+    cout << "             Units" << endl;
+    cout << "               ^" << endl;
+    for(int rows = highest; rows >= 1; rows--){
+        cout << setw(8) << max_point << " -" << setw(4) << min_point << " |  ";
+        max_point = min_point - 1;
+        min_point = max_point - dividen + 1;
+        for(int cols=0; cols <5; cols++){
+            if(arr_all[cols] >= rows){
+                cout << "         @ ";
+            }else{
+                cout << "           ";
+            }
+        }
+        cout << endl;
+    }
+    cout << "               ";
+    for(int cols = 0; cols < 5; cols++){
+        cout << "-------------";
+    }
+    cout << "> Categories" << endl;
+    cout << "                 ";
+    for(int cols = 0; cols < 5; cols++){
+        cout << "          " << x[cols].at(0);
+    }
+}
 string Wallet::getBudget() { return tostr(this->budget);}
 
-void Wallet::changeCurrency(){}
+void Wallet::changeCurrency(){
+
+}
 
 
