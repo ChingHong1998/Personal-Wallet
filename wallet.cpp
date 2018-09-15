@@ -242,7 +242,7 @@ void processSummary(string type) {
     expensesVector.clear();
 }
 
-Wallet::Wallet(string name, double bal,double bud) : username(name),balance(bal),budget(bud) {
+Wallet::Wallet(string name, double bal,double bud, string cur) : username(name),balance(bal),budget(bud),currency(cur) {
 }
 
 Wallet::~Wallet() {
@@ -325,6 +325,7 @@ void Wallet::update_data() {
     temp << "Username: " << username<<endl;
     temp << "Balance: " << balance<<endl;
     temp << "Budget: " << budget<<endl;
+    temp << "Currency: " << currency <<endl;
     temp.close();
     remove("Wallet.txt");
     rename("temp.txt", "Wallet.txt");
@@ -690,7 +691,118 @@ void Wallet::displayChart(){
 string Wallet::getBudget() { return tostr(this->budget);}
 
 void Wallet::changeCurrency(){
-
+    int option1;
+    cout<< "\n1. RM\n2. SGD\n3. RMB\n4. BAHT\n";
+    cout<< "Please choose the currency that you wish to convert to:"<<endl;
+    cin>>option1;
+    int currency_unit;
+    if(currency == "RM  ") {
+        currency_unit=1;
+    }
+    else if(currency == "SGD "){
+        currency_unit=2;
+    }
+    else if(currency == "RMB "){
+        currency_unit=3;
+    }
+    else if(currency == "BAHT"){
+        currency_unit=4;
+    }
+    switch(currency_unit){
+    case 1:
+        if(option1==1){
+            balance=balance;}
+        else if(option1==2){
+            balance*=0.330719;
+            budget*=0.330719;
+            passCurrency(0.330719);
+            this->setCurrency("SGD ");}
+        else if(option1==3){
+            balance*=1.65520;
+            budget*=1.65520;
+            passCurrency(1.65520);
+            this->setCurrency("RMB ");
+            }
+        else if(option1==4){
+            balance*=7.86428;
+            budget*=7.86428;
+            passCurrency(7.86428);
+            this->setCurrency("BAHT");}
+        break;
+    case 2:
+        if(option1==1){
+            balance*=3.02523;
+            budget*=3.02523;
+            passCurrency(3.02523);
+            this->setCurrency("RM  ");}
+        else if(option1==2){
+            balance=balance;}
+        else if(option1==3){
+            balance*=4.99080;
+            budget*=4.99080;
+            passCurrency(4.99080);
+            this->setCurrency("RMB ");}
+        else if(option1==4){
+            balance*=23.7866;
+            budget*=23.7866;
+            passCurrency(23.7866);
+            this->setCurrency("BAHT");}
+    break;
+    case 3:
+        if(option1==1){
+            balance*=0.606175;
+            budget*=0.606175;
+            passCurrency(0.606175);
+            this->setCurrency("RM  ");}
+        else if(option1==2){
+            balance*=0.200368;
+            budget*=0.200368;
+            passCurrency(0.200368);
+            this->setCurrency("SGD ");}
+        else if(option1==3){
+            balance=balance;}
+        else if(option1==4){
+            balance*=4.76526;
+            budget*=4.76526;
+            passCurrency(4.76526);
+            this->setCurrency("BAHT");}
+        break;
+    case 4:
+        if(option1==1){
+            balance*=0.127219;
+            budget*=0.127219;
+            passCurrency(0.127219);
+            this->setCurrency("RM  ");}
+        else if(option1==2){
+            balance*=0.0420549;
+            budget*=0.0420549;
+            passCurrency(0.0420549);
+            this->setCurrency("SGD ");}
+        else if(option1==3){
+            balance*=0.209862;
+            budget*=0.209862;
+            passCurrency(0.209862);
+            this->setCurrency("RMB ");}
+        else if(option1==4){
+            balance=balance;}
+        break;
+    default:
+        cout<< "Invalid option" <<endl;
+    }
 }
+void Wallet::passCurrency(double value) {
+    vector<Expense> exVector = returnExpensesVector();
+    for(int i= 0 ; i < exVector.size() ; i++)
+    {
+        double exp=toDouble(exVector[i].getAmount());
+        exp*=value;
+        exVector[i].setAmount(tostr(exp));
+    }
+    saveBack(exVector);
+}
+
+string Wallet::getCurrency(){return this->currency;}
+
+void Wallet::setCurrency(string cur){this->currency=cur;}
 
 
