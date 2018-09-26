@@ -1,64 +1,24 @@
-#include <iostream>
-#include <ctime>
-#include <fstream>
-#include <sstream>
-#include <stdlib.h>
-#include <string>
-#include <iomanip>
-#include "expense.hpp"
-#include "stack.cpp"
+#include "Expense.h"
 
-using namespace std;
-
-
-
-template <typename T> string tostr(const T& t) {
-   ostringstream os;
-   os<<t;
-   return os.str();
-}
-
-string to2digit(string s) {
-    if(s.length() < 2) {
-        return ("0" + s);
-    }
-    else
-        return s;
-}
-
-double toDouble(const string &s) {
-    stringstream ss(s);
-    double result;
-    ss >> result;
-    return result;
-}
-
-string setTime()
+Expense::Expense()
 {
-    time_t now = time(0);
-    char* dt = ctime(&now);
-    return dt;
-}
-bool is_emptyf(ifstream& pFile)
-{
-    return pFile.peek() == ifstream::traits_type::eof();
-}
-
-Expense::Expense() {
     this->ID = createID();
 }
-Expense::~Expense() {}
 
-void Expense::setID(string id) {this->ID = id;}
-void Expense::setAmount(string amount) {this->amount = toDouble(amount);}
-void Expense::setDate(string date) {this->date = date;}
-void Expense::setDetail(string detail) {this->detail = detail;}
-void Expense::setCategory(string category) {this->category = category;}
-string Expense::getID() {return this->ID;}
-string Expense::getAmount() {return tostr(this->amount);}
-string Expense::getDate() {return this->date;}
-string Expense::getDetail() {return this->detail;}
-string Expense::getCategory() {return this->category;}
+
+void Expense::display_category() {
+    string categories[5] = {"Others", "Accommodation", "Clothes","Transport","Food"};
+    Stack aStack;
+    for(int i = 0; i<5;i++) {
+        aStack.push(categories[i]);
+    }
+    string display;
+    int i= 0;
+    while(!aStack.isEmpty()) {
+        aStack.pop(display);
+        cout <<'\t'<< ++i <<". "<<display<<endl;
+    }
+}
 
 void Expense::add_record(double amount, string detail, string category) {
     ofstream fout;
@@ -83,22 +43,8 @@ void Expense::add_record(double amount, string detail, string category) {
     cout << "\nSuccess! ";
 }
 
-void Expense::remove_record(string id) {
-
-}
-
-void Expense::display_category() {
-    string categories[5] = {"Others", "Accommodation", "Clothes","Transport","Food"};
-    Stack aStack;
-    for(int i = 0; i<5;i++) {
-        aStack.push(categories[i]);
-    }
-    string display;
-    int i= 0;
-    while(!aStack.isEmpty()) {
-        aStack.pop(display);
-        cout <<'\t'<< ++i <<". "<<display<<endl;
-    }
+string Expense::getID(){
+    return this->ID;
 }
 
 string Expense::createID() {
@@ -119,7 +65,6 @@ string Expense::createID() {
     fin.open("expenses.txt",ios::in);
     string temp,lastDigit,lastID;
     double id1=0;
-    int i =0;
     if(is_emptyf(fin)) {
         c = tostr(++counter);
         return id+c;
@@ -157,6 +102,11 @@ void Expense::display() {
     cout << "Detail: " << getDetail()<<endl;
 }
 
+string Expense::getAmount() {return tostr(this->amount);}
+string Expense::getDate() {return this->date;}
+string Expense::getDetail() {return this->detail;}
+string Expense::getCategory() {return this->category;}
+
 void Expense::remake(string dt, string a, string cat, string dtl) {
     if(dt != "")
         setDate(dt);
@@ -177,8 +127,155 @@ void Expense::remake(string dt, string a, string cat, string dtl) {
     }
     if(dtl != "")
         setDetail(dtl);
+}
+void Expense::saveBack(vector <Expense> vec) {
+    ofstream fout;
+    try {
+        fout.open("temp.txt",ios::app | ios::out);
+        if (fout.bad())
+            throw &fout;
+        else {
+            for(int i = 0; i<vec.size();i++) {
+                fout<<vec[i].getID()<<endl;
+                fout<<vec[i].getDate()<<endl;
+                fout<<vec[i].getAmount()<<endl;
+                fout<<vec[i].getCategory()<<endl;
+                fout<<vec[i].getDetail()<<endl;
+            }
+        }
+    }catch (ifstream &x) {
+        cerr<<"Error occurs when write to the file.";
+    }
+    fout.close();
+    remove("expenses.txt");
+    rename("temp.txt", "expenses.txt");
+    cout<<"Save successful\n";
+}
 
+vector <Expense> Expense::returnExpensesVector() {
+            ifstream fin;
+            vector<Expense> expensesVector;
+            expensesVector.clear();
+            string temp;
+            try {
+                fin.open("expenses.txt",ios::in|ios::app);
+                if (fin.bad()){
+                    throw &fin;
+                }else {
+                    while((!fin.eof()) && fin.good()) {
+                        getline(fin,temp);
+                        if(temp == "" || temp == "\n"){
+                            break;
+                        }
+                        Expense expense;
+                        expense.setID(temp);
+                        getline(fin,temp);
+                        expense.setDate(temp);
+                        getline(fin,temp);
+                        expense.setAmount(temp);
+                        getline(fin,temp);
+                        expense.setCategory(temp);
+                        getline(fin,temp);
+                        expense.setDetail(temp);
+                        expensesVector.push_back(expense);
+                    }
+                cout << "Pushed finished"<<endl;
+                }
+            }catch (ifstream &x) {
+                cerr<<"Error occurs when open the file.";
+            }
+            fin.close();
+            return expensesVector;
+}
+void Expense::setAmount(string amount) {this->amount = toDouble(amount);}
+void Expense::setDate(string date) {this->date = date;}
+void Expense::setDetail(string detail) {this->detail = detail;}
+void Expense::setCategory(string category) {this->category = category;}
+void Expense::setID(string id) {this->ID = id;}
 
+void Expense::merge(vector <Expense>& theArray, int first, int mid, int last, int choice ){
+    vector <Expense> s = returnExpensesVector();
+    int first1 = first;
+    int last1 = mid;
+    int first2 = mid+1;
+    int last2 = last;
 
+    int index;
+    for(index=first; (first1<=last1) && (first2<=last2);++index) {
+        if(choice == 1){
+            if(toDouble(theArray[first1].getAmount()) < toDouble(theArray[first2].getAmount())) {
+                s[index] = theArray[first1];
+                ++first1;
+            }
+            else {
+                s[index] = theArray[first2];
+                ++first2;
+            }
+        }else if(choice == 2){
+            if(toDouble(theArray[first1].getAmount()) > toDouble(theArray[first2].getAmount())) {
+                s[index] = theArray[first1];
+                ++first1;
+            }
+            else {
+                s[index] = theArray[first2];
+                ++first2;
+            }
+        }
+    }
+
+    while(first1 <=last1) {
+        s[index] = theArray[first1];
+        ++first1;
+        ++index;
+    }
+
+    while(first2<=last2) {
+        s[index] = theArray[first2];
+        ++first2;
+        ++index;
+    }
+
+    for(index=first;index<=last;++index){
+        theArray[index] = s[index];
+    }
+}
+
+void Expense::mergeSort(vector <Expense> &theArray, int first, int last, int choice){
+   if(first < last) {
+        int mid = (first+last)/2;
+        mergeSort(theArray,first,mid,choice);
+        mergeSort(theArray, mid + 1, last, choice);
+        merge(theArray,first,mid,last,choice);
+   }
+}
+
+int Expense::leftmost(vector <Expense> array, int min, int max, int value)
+{
+    if (min == max){
+        return min;
+    }
+    int mid = (min + max) / 2;
+
+    if (toDouble(array[mid].getAmount()) < value) {
+        return leftmost(array, mid + 1, max, value);
+    }
+    else{
+        return leftmost(array, min, mid, value);
+    }
+}
+
+int Expense::rightmost(vector <Expense> array, int min, int max, int value)
+{
+    if (min == max){
+        return min;
+    }
+    int mid = (min + max + 1) / 2;
+
+    if (toDouble(array[mid].getAmount()) > value){
+        return rightmost(array, min, mid - 1, value);
+    }
+    else{
+        return rightmost(array, mid, max, value);
+    }
 }
 
