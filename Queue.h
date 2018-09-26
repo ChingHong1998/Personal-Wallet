@@ -1,6 +1,8 @@
-#ifndef QUEUE_L_HPP
-#define QUEUE_L_HPP
-#include <string>
+#ifndef QUEUE_H
+#define QUEUE_H
+#include <iostream>
+using namespace std;
+
 typedef string QueueItemType;
 
 class Queue {
@@ -21,5 +23,6 @@ class Queue {
     // end QueueNode
     QueueNode* backPtr;
     QueueNode* frontPtr;
-}; // end Queue }; // end namespace Practice2 #endif
-#endif
+};
+
+#endif // QUEUE_H
