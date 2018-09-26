@@ -1,12 +1,10 @@
-#include <iostream>
-#include "queue.hpp"
-using namespace std;
+#include "Queue.h"
 
 Queue::Queue() : backPtr(NULL), frontPtr(NULL) {}
 Queue::~Queue() {
     while (!isEmpty())
         dequeue();
-    }
+}
 
 bool Queue::isEmpty() {
     // TODO: Fill in your code here
