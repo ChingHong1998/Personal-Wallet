@@ -1,33 +1,4 @@
-#include <iostream>
-#include <string>
-#include <cstddef> // for NULL
-#include <new> // for bad_alloc
-
-using namespace std;
-
-typedef string StackItemType;
-
-
-class Stack {
-    public: /** Default constructor. */
-        Stack();
-        /** Copy constructor. * @param aStack The stack to copy. */
-        Stack(const Stack& aStack);
-        /** Destructor. */
-        ~Stack(); // Stack operations:
-        bool isEmpty() const;
-        void push(const StackItemType& newItem);
-        void pop() ;
-        void pop(StackItemType& stackTop);
-        StackItemType getTop();
-
-    private: /** A node on the stack. */
-        struct StackNode { /** A data item on the stack. */
-            StackItemType item; /** Pointer to next node. */
-            StackNode *next;
-        };
-        StackNode *topPtr;
-};
+#include "Stack.h"
 
 Stack::Stack() : topPtr(NULL) { }
 
@@ -106,7 +77,3 @@ StackItemType Stack::getTop() {
     else // stack is not empty; retrieve top
         return topPtr->item;
 }
-
-
-
-
