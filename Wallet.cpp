@@ -30,25 +30,30 @@ void Wallet::warning(){
 }
 
 void Wallet::addExpense(){
-    system("cls");
+    cin.ignore();
+    cout<<string(50, '.')<<endl;
     cout << "You Are Currently Adding An Expense Record...." << endl;
     Expense * expense = new Expense;
     cout<<"Enter Your Amount: ";
-    double amount;
-    cin >> amount;
-    if(isEnough(amount)) {
-        cin.ignore();
+    string amount;
+    do {
+        getline(cin, amount);
+    }while(isNotValidInt(amount));
+    if(isEnough(toDouble(amount))) {
         cout<<"Category : "<<endl;
         expense->display_category();
-        cout<<"Enter Your Category: ";
+
         string category;
-        getline(cin,category);
+        do {
+            cout<<"Enter Your Category[1~5]: ";
+            getline(cin,category);
+        }while(toDouble(category)>5 || toDouble(category)<=0);
         cout<<"Enter The Detail: ";
         string detail;
         getline(cin,detail);
-        expense->add_record(amount,detail,category);
+        expense->add_record(toDouble(amount),detail,category);
         cout << "\nAdded!";
-        balance -= amount;
+        balance -= toDouble(amount);
         update_data();
     }
     else
@@ -56,24 +61,28 @@ void Wallet::addExpense(){
 }
 
 void Wallet::addIncome(){
-    system("cls");
+    cin.ignore();
+    cout<<string(50, '.')<<endl;
     Income * income = new Income;
     cout << "You Are Currently Adding An Income Record...." << endl;
     cout<<"Enter Your Amount: ";
-    double amount;
-    cin >> amount;
-    cin.ignore();
+    string amount;
+    do {
+        getline(cin, amount);
+    }while(isNotValidInt(amount));
     cout<<"Category: " << endl;
     income->display_category();
-    cout << "Enter Your Category: ";
     string category;
-    getline(cin, category);
+    do {
+        cout<<"Enter Your Category[1~5]: ";
+        getline(cin,category);
+    }while(toDouble(category)>5 || toDouble(category)<=0);
     cout<<"Enter The Detail: ";
     string detail;
     getline(cin, detail);
-    income->add_record(amount,detail,category);
+    income->add_record(toDouble(amount),detail,category);
     cout << "\nAdded!";
-    balance += amount;
+    balance += toDouble(amount);
     update_data();
 }
 
@@ -93,35 +102,36 @@ void Wallet::update_data() {
     rename("temp.txt", "Wallet.txt");
 }
 
-void Wallet::editExpense(string Date, ifstream &filen1){
+void Wallet::editExpense(ifstream &filen1){
     Expense *expense = new Expense();
     vector <Expense> expensesVector = expense->returnExpensesVector();
-    system("CLS");
-    display_record(filen1,Date);
+    cout<<string(50, '.')<<endl;
+    cout << "You Are Currently Editing An Expense Record...." << endl;
+    cout << "Enter the date you want to edit[DDMMYY]: ";
+    display_day_record(filen1);
     cout << "Enter the ID You want to Edit: ";
     string id;
-    cin.ignore();
     getline(cin,id);
     for(int i = 0; i<expensesVector.size();i++) {
         if(expensesVector[i].getID() == id) {
             balance += toDouble(expensesVector[i].getAmount());
-            string date="";
             string amount="";
             string category="";
             string detail="";
             system("CLS");
             expensesVector[i].display();
             cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
-            cout<< "Date: ";
-            getline(cin,date);
             cout<< "Amount: ";
-            getline(cin,amount);
+            do {
+                getline(cin, amount);
+            }while(isNotValidInt(amount));
             expensesVector[i].display_category();
             cout<< "Category: ";
             getline(cin,category);
             cout<< "Detail: ";
             getline(cin,detail);
-            expensesVector[i].remake(date,amount,category,detail);
+            cout << endl;
+            expensesVector[i].remake(amount,category,detail);
             expensesVector[i].display();
             balance -= toDouble(amount);
             break;
@@ -129,53 +139,58 @@ void Wallet::editExpense(string Date, ifstream &filen1){
     }
     expense->saveBack(expensesVector);
     expensesVector.clear();
-    cout<<"Edit success";
+    cout<<"Edit successful";
     update_data();
 }
-void Wallet::editIncome(string Date, ifstream &filen1){
+void Wallet::editIncome(ifstream &filen1){
     Income *income = new Income();
-    vector <Income> expensesVector = income->returnExpensesVector();
-    system("CLS");
-    display_record(filen1,Date);
+    vector <Income> incomesVector = income->returnIncomeVector();
+    cout<<string(50, '.')<<endl;
+    cout << "You Are Currently Editing An Income Record...." << endl;
+    cout << "Enter the date you want to edit[DDMMYY]: ";
+    display_day_record(filen1);
     cout << "Enter the ID You want to Edit: ";
     string id;
-    cin.ignore();
     getline(cin,id);
-    for(int i = 0; i<expensesVector.size();i++) {
-        if(expensesVector[i].getID() == id) {
-            balance -= toDouble(expensesVector[i].getAmount());
-            string date="";
+    for(int i = 0; i<incomesVector.size();i++) {
+        if(incomesVector[i].getID() == id) {
+            balance -= toDouble(incomesVector[i].getAmount());
             string amount="";
             string category="";
             string detail="";
             system("CLS");
-            expensesVector[i].display();
+            incomesVector[i].display();
             cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
-            cout<< "Date: ";
-            getline(cin,date);
             cout<< "Amount: ";
-            getline(cin,amount);
-            expensesVector[i].display_category();
+            do {
+                getline(cin, amount);
+            }while(isNotValidInt(amount));
+            incomesVector[i].display_category();
             cout<< "Category: ";
             getline(cin,category);
             cout<< "Detail: ";
             getline(cin,detail);
-            expensesVector[i].remake(date,amount,category,detail);
-            expensesVector[i].display();
+            cout << endl;
+            incomesVector[i].remake(amount,category,detail);
+            incomesVector[i].display();
             balance += toDouble(amount);
             break;
         }
     }
-    income->saveBack(expensesVector);
-    expensesVector.clear();
-    cout<<"Edit success";
+    income->saveBack(incomesVector);
+    incomesVector.clear();
+    cout<<"Edit successful";
     update_data();
 }
-void Wallet::display_record(ifstream &filen1,string choose2){
+void Wallet::display_day_record(ifstream &filen1){
+    cin.ignore();
     Node *head = NULL;
     string record, element;
     int counter = 4;
+    string choose2;
+    getline(cin,choose2);
     bool correct = false;
+    int found =0;
     while(!filen1.eof()){
         string element;
         for(int i = 0; i < 5; i++){
@@ -193,21 +208,30 @@ void Wallet::display_record(ifstream &filen1,string choose2){
             }
         }
         if(correct){
-            print(head);
+            print(head,4);
+            cout << endl;
+            found++;
         }
+
         deleteAll(&head);
+    }
+    if(found==0) {
+        cout<<"No record found.\n";
     }
     filen1.close();
 }
 
-void Wallet::deleteExpense(string Date, ifstream& fin){
+void Wallet::deleteExpense(ifstream& fin){
     Expense *expense = new Expense();
     vector<Expense> expensesVector = expense->returnExpensesVector();
     string id;
-    display_record(fin,Date);
+    cout<<string(50, '.')<<endl;
+    cout << "You Are Currently Deleting An Expense Record...." << endl;
+    cout << "Enter the day you want to delete[DDMMYY]: ";
+    display_day_record(fin);
     cout << "Enter the ID You want to delete: ";
-    cin.get();
     getline(cin,id);
+    cout << id;
     for(int i = 0; i< expensesVector.size();i++) {
         if(id == expensesVector[i].getID()) {
             balance += toDouble(expensesVector[i].getAmount());
@@ -215,34 +239,41 @@ void Wallet::deleteExpense(string Date, ifstream& fin){
             break;
         }
     }
+    fin.close();
     expense->saveBack(expensesVector);
     expensesVector.clear();
+
     cout << "Deleted.\n";
     update_data();
 }
 
-void Wallet::deleteIncome(string Date, ifstream& fin){
+void Wallet::deleteIncome(ifstream& fin){
     Income *income = new Income();
-    vector<Income> expensesVector = income->returnExpensesVector();
+    vector<Income> incomesVector = income->returnIncomeVector();
     string id;
-    display_record(fin,Date);
+    cout<<string(50, '.')<<endl;
+    cout << "You Are Currently Deleting An Income Record...." << endl;
+    cout << "Enter the day you want to delete[DDMMYY]: ";
+    display_day_record(fin);
     cout << "Enter the ID You want to delete: ";
-    cin.get();
     getline(cin,id);
-    for(int i = 0; i< expensesVector.size();i++) {
-        if(id == expensesVector[i].getID()) {
-            balance -= toDouble(expensesVector[i].getAmount());
-            expensesVector.erase(expensesVector.begin()+i);
+    for(int i = 0; i< incomesVector.size();i++) {
+        if(id == incomesVector[i].getID()) {
+            balance -= toDouble(incomesVector[i].getAmount());
+            incomesVector.erase(incomesVector.begin()+i);
             break;
         }
     }
-    income->saveBack(expensesVector);
-    expensesVector.clear();
+    income->saveBack(incomesVector);
+    incomesVector.clear();
     cout << "Deleted.\n";
     update_data();
 }
 
 void Wallet::displayAll(ifstream &fin) {
+    cin.ignore();
+    cout<<string(50, '.')<<endl;
+    cout << "You Are Currently Viewing All Expense Record...." << endl;
     string temp;
     Queue q1;
     while(getline(fin,temp)) {
@@ -264,16 +295,21 @@ void Wallet::displayAll(ifstream &fin) {
     fin.close();
 }
 
-void Wallet::display_record(ifstream &filen1){
+void Wallet::display_record(ifstream &filen1, int choose){
+    cin.ignore();
     Node *head = NULL;
     string record, element, choose2;
-    int choose;
     int counter = 4;
     bool correct = false;
-    cout << "Choose date, month or year: " << endl;
-    cin >> choose;
-    cout << "Enter the specified date/ month/ year: " << endl;
-    cin >> choose2;
+    int found = 0;
+    if(choose == 2){
+        cout << "Please enter the specified date in DD format: ";
+    }else if(choose == 3){
+        cout << "Please enter the specified month in MM format: ";
+    }else{
+        cout << "Please enter the specified year in YY format: ";
+    }
+    getline(cin,choose2);
     while(!filen1.eof()){
         string element;
         for(int i = 0; i < 5; i++){
@@ -285,10 +321,10 @@ void Wallet::display_record(ifstream &filen1){
         }
         element = GetNth(head,counter);
         int k = 0;
-        if(choose == 2){
+        if(choose == 3){
             k = 2;
         }
-        if(choose == 3){
+        if(choose == 4){
             k = 4;
         }
         for(int i = 0; i < choose2.length() ; i++, k++){
@@ -301,9 +337,14 @@ void Wallet::display_record(ifstream &filen1){
             }
         }
         if(correct){
-            print(head);
+            print(head,4);
+            cout << endl;
+            found++;
         }
         deleteAll(&head);
+    }
+    if(found==0) {
+        cout<< "No records found."<<endl;
     }
     filen1.close();
 }
@@ -313,11 +354,12 @@ void Wallet::sort_expense_amount(int sort_choice){
         vector <Expense> expensesVector = expense->returnExpensesVector();
         expense->mergeSort(expensesVector, 0, expensesVector.size() - 1, sort_choice);
         for(int i = 0; i < expensesVector.size(); i++){
-            cout << expensesVector[i].getID() << endl;
-            cout << expensesVector[i].getDate() << endl;
-            cout << expensesVector[i].getAmount() << endl;
-            cout << expensesVector[i].getCategory() << endl;
-            cout << expensesVector[i].getDetail() << endl;
+            cout << "\tID: " << expensesVector[i].getID() << endl;
+            cout << "\tDate: " << expensesVector[i].getDate() << endl;
+            cout << "\tAmount: " << expensesVector[i].getAmount() << endl;
+            cout << "\tCategory: " << expensesVector[i].getCategory() << endl;
+            cout << "\tDetail: " << expensesVector[i].getDetail() << endl;
+            cout << endl;
         }
 }
 
@@ -373,11 +415,12 @@ void Wallet::sort_expense_date(int sort_choice){
             }
         }
         for(int i = 0; i < expensesVector.size(); i++){
-            cout << expensesVector[i].getID() << endl;
-            cout << expensesVector[i].getDate() << endl;
-            cout << expensesVector[i].getAmount() << endl;
-            cout << expensesVector[i].getCategory() << endl;
-            cout << expensesVector[i].getDetail() << endl;
+            cout << "\tID: " << expensesVector[i].getID() << endl;
+            cout << "\tDate: " << expensesVector[i].getDate() << endl;
+            cout << "\tAmount: " << expensesVector[i].getAmount() << endl;
+            cout << "\tCategory: " << expensesVector[i].getCategory() << endl;
+            cout << "\tDetail: " << expensesVector[i].getDetail() << endl;
+            cout << endl;
         }
         expensesVector.clear();
         cout << "Sorted" << endl;
@@ -385,161 +428,167 @@ void Wallet::sort_expense_date(int sort_choice){
 
 void Wallet::sort_income_amount(int sort_choice){
         Income *income = new Income();
-        vector <Income> expensesVector = income->returnExpensesVector();
-        income->mergeSort(expensesVector, 0, expensesVector.size() - 1, sort_choice);
-        for(int i = 0; i < expensesVector.size(); i++){
-            cout << expensesVector[i].getID() << endl;
-            cout << expensesVector[i].getDate() << endl;
-            cout << expensesVector[i].getAmount() << endl;
-            cout << expensesVector[i].getCategory() << endl;
-            cout << expensesVector[i].getDetail() << endl;
+        vector <Income> incomesVector = income->returnIncomeVector();
+        income->mergeSort(incomesVector, 0, incomesVector.size() - 1, sort_choice);
+        for(int i = 0; i < incomesVector.size(); i++){
+            cout << "\tID: " << incomesVector[i].getID() << endl;
+            cout << "\tDate: " << incomesVector[i].getDate() << endl;
+            cout << "\tAmount: " << incomesVector[i].getAmount() << endl;
+            cout << "\tCategory: " << incomesVector[i].getCategory() << endl;
+            cout << "\tDetail: " << incomesVector[i].getDetail() << endl;
+            cout << endl;
         }
 }
 
 void Wallet::sort_income_date(int sort_choice){
     Income *income = new Income();
-    vector <Income> expensesVector = income->returnExpensesVector();
+    vector <Income> incomesVector = income->returnIncomeVector();
     Income temparr[1];
     double year1, month1, date1, id1, year2, month2, date2, id2;
-    for(int i = 0; i < expensesVector.size() - 1; i++){
-        for(int x = 0; x < expensesVector.size() - 1; x++){
-            year1 = toDouble(expensesVector[x].getID().substr(4,2)); year2 = toDouble(expensesVector[x+1].getID().substr(4,2));
-            month1 = toDouble(expensesVector[x].getID().substr(2,2)); month2 = toDouble(expensesVector[x+1].getID().substr(2,2));
-            date1 = toDouble(expensesVector[x].getID().substr(0,2)); date2 = toDouble(expensesVector[x+1].getID().substr(0,2));
-            id1 = toDouble(expensesVector[x].getID().substr(6,1)); id2 = toDouble(expensesVector[x+1].getID().substr(6,1));
+    for(int i = 0; i < incomesVector.size() - 1; i++){
+        for(int x = 0; x < incomesVector.size() - 1; x++){
+            year1 = toDouble(incomesVector[x].getID().substr(4,2)); year2 = toDouble(incomesVector[x+1].getID().substr(4,2));
+            month1 = toDouble(incomesVector[x].getID().substr(2,2)); month2 = toDouble(incomesVector[x+1].getID().substr(2,2));
+            date1 = toDouble(incomesVector[x].getID().substr(0,2)); date2 = toDouble(incomesVector[x+1].getID().substr(0,2));
+            id1 = toDouble(incomesVector[x].getID().substr(6,1)); id2 = toDouble(incomesVector[x+1].getID().substr(6,1));
                 if(sort_choice == 3){
                     if((year1 < year2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }else if((year1 == year2) && (month1 < month2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }else if((year1 == year2) && (month1 == month2) && (date1 < date2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }else if((year1 == year2) && (month1 == month2) && (date1 == date2) && (id1 > id2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }
                 }
                 if(sort_choice == 4){
                     if((year1 > year2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }else if((year1 == year2) && (month1 > month2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }else if((year1 == year2) && (month1 == month2) && (date1 > date2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }else if((year1 == year2) && (month1 == month2) && (date1 == date2) && (id1 > id2)){
-                        temparr[0] = expensesVector[x+1];
-                        expensesVector[x+1] = expensesVector[x];
-                        expensesVector[x] = temparr[0];
+                        temparr[0] = incomesVector[x+1];
+                        incomesVector[x+1] = incomesVector[x];
+                        incomesVector[x] = temparr[0];
                     }
                 }
             }
         }
-        for(int i = 0; i < expensesVector.size(); i++){
-            cout << expensesVector[i].getID() << endl;
-            cout << expensesVector[i].getDate() << endl;
-            cout << expensesVector[i].getAmount() << endl;
-            cout << expensesVector[i].getCategory() << endl;
-            cout << expensesVector[i].getDetail() << endl;
+        for(int i = 0; i < incomesVector.size(); i++){
+            cout << "\tID: " << incomesVector[i].getID() << endl;
+            cout << "\tDate: " << incomesVector[i].getDate() << endl;
+            cout << "\tAmount: " << incomesVector[i].getAmount() << endl;
+            cout << "\tCategory: " << incomesVector[i].getCategory() << endl;
+            cout << "\tDetail: " << incomesVector[i].getDetail() << endl;
+            cout << endl;
         }
-        expensesVector.clear();
+        incomesVector.clear();
         cout << "Sorted" << endl;
 }
 
 void Wallet::search_expense(){
+    cin.ignore();
     Expense *expense = new Expense;
     string start_pt, end_pt;
-    int start = 0, ending = 0;
+    int found = 0;
     cout << "Enter the date you want to search in [DDMMYY]: \nFrom: ";
-    cin >> start_pt;
-    start_pt = start_pt + "1";
+    getline(cin,start_pt);
     cout << "Until: ";
-    cin >> end_pt;
+    getline(cin,end_pt);
+    double start_in_number = toDouble(start_pt.substr(4,2)+start_pt.substr(2,2)+start_pt.substr(0,2));
+    double end_in_number = toDouble(end_pt.substr(4,2)+end_pt.substr(2,2)+end_pt.substr(0,2));
     vector <Expense> vec = expense->returnExpensesVector();
     for(int i = 0; i < vec.size(); i++){
-        string temp = vec[i].getID();
-        if(temp == start_pt){
-            start = i;
+        double temp = toDouble(vec[i].getID().substr(4,2)+vec[i].getID().substr(2,2)+vec[i].getID().substr(0,2));
+        if(temp >= start_in_number && temp <= end_in_number){
+            found++;
+            cout << "\tID: " << vec[i].getID() << endl;
+            cout << "\tDate: " << vec[i].getDate() << endl;
+            cout << "\tAmount: " << vec[i].getAmount() << endl;
+            cout << "\tCategory: " << vec[i].getCategory() << endl;
+            cout << "\tDetail: " << vec[i].getDetail() << endl;
+            cout << endl;
         }
     }
-    for(int i = 0; i < vec.size(); i++){
-        string temp = vec[i].getID();
-        if(temp.substr(0,6) == end_pt){
-            ending = i;
-        }
-    }
-    for(int i = start; i <= ending; i++){
-        cout << vec[i].getID() << endl;
-        cout << vec[i].getDate() << endl;
-        cout << vec[i].getAmount() << endl;
-        cout << vec[i].getCategory() << endl;
-        cout << vec[i].getDetail() << endl;
+    if(found==0) {
+        cout<< "No records found."<<endl;
     }
 }
 void Wallet::search2_expense(){
     Expense *expense = new Expense();
+    int found =0;
     vector <Expense> vec = expense->returnExpensesVector();
     expense->mergeSort(vec, 0, vec.size() - 1, 1);
-    cout << "Enter the amount you want to search: \n From: ";
+    cout << "Enter the amount you want to search: \nFrom: ";
     int start_amount, end_amount, start, ending;
     cin >> start_amount;
-    cout << " Until: ";
+    cout << "Until: ";
     cin >> end_amount;
     start = expense->leftmost(vec, 0, vec.size() - 1, start_amount);
     ending = expense->rightmost(vec, 0, vec.size() - 1, end_amount);
     for(int i = start; i <= ending; i++){
-        cout << vec[i].getID() << endl;
-        cout << vec[i].getDate() << endl;
-        cout << vec[i].getAmount() << endl;
-        cout << vec[i].getCategory() << endl;
-        cout << vec[i].getDetail() << endl;
+        found++;
+        cout << "\tID: " << vec[i].getID() << endl;
+        cout << "\tDate: " << vec[i].getDate() << endl;
+        cout << "\tAmount: " << vec[i].getAmount() << endl;
+        cout << "\tCategory: " << vec[i].getCategory() << endl;
+        cout << "\tDetail: " << vec[i].getDetail() << endl;
+        cout << endl;
     }
+    if(found==0) {
+        cout<< "No records found."<<endl;
+    }
+    cin.ignore();
 }
 void Wallet::search_income(){
+    cin.ignore();
     Income *income = new Income;
+    int found = 0;
     string start_pt, end_pt;
-    int start = 0, ending = 0;
     cout << "Enter the date you want to search in [DDMMYY]: \nFrom: ";
-    cin >> start_pt;
-    start_pt = start_pt + "1";
+    getline(cin,start_pt);
     cout << "Until: ";
-    cin >> end_pt;
-    vector <Income> vec = income->returnExpensesVector();
+    getline(cin,end_pt);
+    double start_in_number = toDouble(start_pt.substr(4,2)+start_pt.substr(2,2)+start_pt.substr(0,2));
+    double end_in_number = toDouble(end_pt.substr(4,2)+end_pt.substr(2,2)+end_pt.substr(0,2));
+    vector <Income> vec = income->returnIncomeVector();
     for(int i = 0; i < vec.size(); i++){
-        string temp = vec[i].getID();
-        if(temp == start_pt){
-            start = i;
+        double temp = toDouble(vec[i].getID().substr(4,2)+vec[i].getID().substr(2,2)+vec[i].getID().substr(0,2));
+        if(temp >= start_in_number && temp <= end_in_number){
+            found++;
+            cout << "\tID: " << vec[i].getID() << endl;
+            cout << "\tDate: " << vec[i].getDate() << endl;
+            cout << "\tAmount: " << vec[i].getAmount() << endl;
+            cout << "\tCategory: " << vec[i].getCategory() << endl;
+            cout << "\tDetail: " << vec[i].getDetail() << endl;
+            cout << endl;
         }
     }
-    for(int i = 0; i < vec.size(); i++){
-        string temp = vec[i].getID();
-        if(temp.substr(0,6) == end_pt){
-            ending = i;
-        }
-    }
-    for(int i = start; i <= ending; i++){
-        cout << vec[i].getID() << endl;
-        cout << vec[i].getDate() << endl;
-        cout << vec[i].getAmount() << endl;
-        cout << vec[i].getCategory() << endl;
-        cout << vec[i].getDetail() << endl;
+    if(found==0) {
+        cout<< "No records found."<<endl;
     }
 }
 void Wallet::search2_income(){
     Income *income = new Income();
-    vector <Income> vec = income->returnExpensesVector();
+    int found=0;
+    vector <Income> vec = income->returnIncomeVector();
     income->mergeSort(vec, 0, vec.size() - 1, 1);
     cout << "Enter the amount you want to search: \n From: ";
     int start_amount, end_amount, start, ending;
@@ -549,15 +598,20 @@ void Wallet::search2_income(){
     start = income->leftmost(vec, 0, vec.size() - 1, start_amount);
     ending = income->rightmost(vec, 0, vec.size() - 1, end_amount);
     for(int i = start; i <= ending; i++){
+        found++;
         cout << vec[i].getID() << endl;
         cout << vec[i].getDate() << endl;
         cout << vec[i].getAmount() << endl;
         cout << vec[i].getCategory() << endl;
         cout << vec[i].getDetail() << endl;
+        cout << endl;
+    }
+    if(found==0) {
+        cout<< "No records found."<<endl;
     }
 }
 void Wallet::ChartExpense(){
-    system("cls");
+    cin.ignore();
     Expense *expense = new Expense();
     string x[5] = {"Food", "Transport", "Clothes", "Accommodation", "Others"};
     vector <Expense> vec = expense->returnExpensesVector();
@@ -641,10 +695,11 @@ void Wallet::ChartExpense(){
 }
 
 void Wallet::ChartIncome(){
+    cin.ignore();
     system("cls");
     Income *income = new Income();
     string x[5] = {"Salary", "Dividend", "Commission", "Interest", "Others"};
-    vector <Income> vec = income->returnExpensesVector();
+    vector <Income> vec = income->returnIncomeVector();
     int total = 0, first = 0, second = 0, third = 0, forth = 0, fifth = 0;
     for(int i = 0; i < vec.size(); i++){
         if(vec[i].getCategory() == x[0]){
@@ -828,7 +883,7 @@ void Wallet::passCurrency(double value) {
     Expense *expense = new Expense();
     vector<Expense> exVector = expense->returnExpensesVector();
     Income *income = new Income();
-    vector<Income> exVector2 = income->returnExpensesVector();
+    vector<Income> exVector2 = income->returnIncomeVector();
     for(int i= 0 ; i < exVector2.size() ; i++)
     {
         double exp=toDouble(exVector2[i].getAmount());
@@ -848,6 +903,7 @@ void Wallet::passCurrency(double value) {
 void Wallet::setCurrency(string cur){this->currency=cur;}
 
 void Wallet::processSummaryExpense(string type) {
+    cin.ignore();
     Expense *expense = new Expense();
     vector<Expense> expensesVector = expense->returnExpensesVector();
     double food=0;
@@ -893,7 +949,7 @@ void Wallet::processSummaryExpense(string type) {
                 others += toDouble(expensesVector[i].getAmount());
         }
         else {
-            cout << "\nDate: " << lastDate <<endl;
+            cout << "\n\tDate: " << lastDate <<endl;
             cout << "\tFood: " << food << endl;
             cout << "\tTransport: " << transport << endl;
             cout << "\tClothes: " << clothes << endl;
@@ -919,7 +975,7 @@ void Wallet::processSummaryExpense(string type) {
         }
 
     }
-    cout << "\nDate: " << lastDate <<endl;
+    cout << "\n\tDate: " << lastDate <<endl;
     cout << "\tFood: " << food << endl;
     cout << "\tTransport: " << transport << endl;
     cout << "\tClothes: " << clothes << endl;
@@ -953,7 +1009,7 @@ void Wallet::displaySummaryExpense(){
 }
 void Wallet::processSummaryIncome(string type) {
     Income *income = new Income();
-    vector<Income> expensesVector = income->returnExpensesVector();
+    vector<Income> incomesVector = income->returnIncomeVector();
     double salary=0;
     double dividend=0;
     double commission=0;
@@ -982,22 +1038,22 @@ void Wallet::processSummaryIncome(string type) {
     cout <<type<<" summary\n";
     string lastDate,lastDay;
     int i =0;
-    for(lastDay= (expensesVector[i].getID().substr(startID,endID));i < expensesVector.size(); i++) {
-        if((expensesVector[i].getID().substr(startID,endID)) == lastDay) {
-            lastDate = expensesVector[i].getDate().substr(startDate,endDate) + " " + expensesVector[i].getDate().substr(20,4);
-            if(expensesVector[i].getCategory() == "Salary")
-                salary += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Dividend")
-                dividend += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Commission")
-                commission += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Interest")
-                interest += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Others")
-                others += toDouble(expensesVector[i].getAmount());
+    for(lastDay= (incomesVector[i].getID().substr(startID,endID));i < incomesVector.size(); i++) {
+        if((incomesVector[i].getID().substr(startID,endID)) == lastDay) {
+            lastDate = incomesVector[i].getDate().substr(startDate,endDate) + " " + incomesVector[i].getDate().substr(20,4);
+            if(incomesVector[i].getCategory() == "Salary")
+                salary += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Dividend")
+                dividend += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Commission")
+                commission += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Interest")
+                interest += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Others")
+                others += toDouble(incomesVector[i].getAmount());
         }
         else {
-            cout << "\nDate: " << lastDate <<endl;
+            cout << "\n\tDate: " << lastDate <<endl;
             cout << "\tSalary: " << salary << endl;
             cout << "\tDividend: " << dividend << endl;
             cout << "\tCommission: " << commission << endl;
@@ -1008,33 +1064,32 @@ void Wallet::processSummaryIncome(string type) {
             commission=0;
             interest=0;
             others=0;
-            lastDay = (expensesVector[i].getID().substr(startID,endID));
-            if(expensesVector[i].getCategory() == "Salary")
-                salary += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Dividend")
-                dividend += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Commission")
-                commission += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Interest")
-                interest += toDouble(expensesVector[i].getAmount());
-            else if(expensesVector[i].getCategory() == "Others")
-                others += toDouble(expensesVector[i].getAmount());
-            lastDate = expensesVector[i].getDate().substr(startDate,endDate) + " " + expensesVector[i].getDate().substr(20,4);
+            lastDay = (incomesVector[i].getID().substr(startID,endID));
+            if(incomesVector[i].getCategory() == "Salary")
+                salary += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Dividend")
+                dividend += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Commission")
+                commission += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Interest")
+                interest += toDouble(incomesVector[i].getAmount());
+            else if(incomesVector[i].getCategory() == "Others")
+                others += toDouble(incomesVector[i].getAmount());
+            lastDate = incomesVector[i].getDate().substr(startDate,endDate) + " " + incomesVector[i].getDate().substr(20,4);
         }
 
     }
-    cout << "\nDate: " << lastDate <<endl;
+    cout << "\n\tDate: " << lastDate <<endl;
     cout << "\tSalary: " << salary << endl;
     cout << "\tDividend: " << dividend << endl;
     cout << "\tCommission: " << commission << endl;
     cout << "\tInterest: " << interest << endl;
     cout << "\tOthers: " << others << endl;
-    expensesVector.clear();
+    incomesVector.clear();
 }
 
 
 void Wallet::displaySummaryIncome(){
-
     int choice;
     cout << "What kinds of summary:\n\t1. Daily\n\t2. Monthly\n\t3. Yearly\n\tYour choice: ";
     cin >> choice;

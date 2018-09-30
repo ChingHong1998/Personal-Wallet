@@ -22,12 +22,12 @@ class Income:public funct
         string getDetail() ;
         string getCategory();
         void display();
-        void remake(string,string,string,string);
+        void remake(string,string,string);
         void setAmount(string);
         void setDetail(string);
         void setDate(string);
         void setCategory(string);
-        vector <Income> returnExpensesVector();
+        vector <Income> returnIncomeVector();
         void merge(vector <Income>& theArray, int first, int mid, int last, int choice );
         void mergeSort(vector <Income> &theArray, int first, int last, int choice);
         int leftmost(vector <Income> array, int min, int max, int value);

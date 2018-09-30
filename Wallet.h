@@ -15,6 +15,7 @@ class Wallet:public funct{
     public:
         Wallet();
         Wallet(string name, double bal,double bud,string cur);
+        Wallet(string name, string bal,double bud,string cur);
         double getBudget();
         string displayUsername();
         string getCurrency();
@@ -24,13 +25,13 @@ class Wallet:public funct{
         void addIncome();
         bool isEnough(double amount);
         void update_data();
-        void editExpense(string Date, ifstream &filen1);
-        void editIncome(string Date, ifstream &filen1);
-        void display_record(ifstream &filen1,string choose2);
-        void deleteExpense(string Date,ifstream &fin);
-        void deleteIncome(string Date,ifstream &fin);
+        void editExpense(ifstream &filen1);
+        void editIncome(ifstream &filen1);
+        void display_day_record(ifstream &filen1);
+        void deleteExpense(ifstream &fin);
+        void deleteIncome(ifstream &fin);
         void displayAll(ifstream &fin);
-        void display_record(ifstream &filen1);
+        void display_record(ifstream &filen1, int choose);
         void sort_expense_amount(int sort_choice);
         void sort_expense_date(int sort_choice);
         void sort_income_amount(int sort_choice);

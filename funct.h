@@ -5,6 +5,9 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
+#include <limits>
+#include <locale>
 using namespace std;
 struct Node{
     string data;
@@ -30,9 +33,11 @@ class funct
             head = temp;
             return head;
         }
-        void print(Node *p);
+        void print(Node *p, int counter);
         string GetNth(Node *head, int index);
         void deleteAll(Node** head);
+        bool isNotValidInt(const std::string& str);
+        void IntOnly(int x);
     private:
 };
 

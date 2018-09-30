@@ -40,7 +40,6 @@ void Expense::add_record(double amount, string detail, string category) {
         fout << category << "\n";
         fout << detail<<"\n";
     }
-    cout << "\nSuccess! ";
 }
 
 string Expense::getID(){
@@ -107,9 +106,7 @@ string Expense::getDate() {return this->date;}
 string Expense::getDetail() {return this->detail;}
 string Expense::getCategory() {return this->category;}
 
-void Expense::remake(string dt, string a, string cat, string dtl) {
-    if(dt != "")
-        setDate(dt);
+void Expense::remake(string a, string cat, string dtl) {
     if(a != "")
         setAmount(a);
     if(cat!= "") {
@@ -149,7 +146,6 @@ void Expense::saveBack(vector <Expense> vec) {
     fout.close();
     remove("expenses.txt");
     rename("temp.txt", "expenses.txt");
-    cout<<"Save successful\n";
 }
 
 vector <Expense> Expense::returnExpensesVector() {
@@ -179,7 +175,6 @@ vector <Expense> Expense::returnExpensesVector() {
                         expense.setDetail(temp);
                         expensesVector.push_back(expense);
                     }
-                cout << "Pushed finished"<<endl;
                 }
             }catch (ifstream &x) {
                 cerr<<"Error occurs when open the file.";

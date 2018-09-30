@@ -30,15 +30,33 @@ string funct::to2digit(string s) {
     else
         return s;
 }
+bool funct::isNotValidInt(const std::string& x)
+{
+    bool condition = false;
+    for(int i = 0; i < x.length(); i++){
+        if(!isdigit(x[i])){
+            condition = true;
+            break;
+        }
+        if(isspace(x[i])) {
+            condition = true;
+            break;
+        }
+    }
+    if(condition){
+        cout << "Invalid. Enter again: ";
+    }
+    return condition;
+}
 
 
-
-void funct::print(Node *p){
+void funct::print(Node *p, int counter){
+    string category[5] = {"ID","Date","Amount","Category","Detail"};
     if(p == NULL){
         return;
     }
-    print(p->next);
-    cout << p->data << endl;
+    print(p->next,counter - 1);
+    cout << "\t" << category[counter] << ": " << p->data << endl;
 }
 string funct::GetNth(Node *head, int index){
     struct Node* current = head;
@@ -50,6 +68,13 @@ string funct::GetNth(Node *head, int index){
         counter++;
         current = current->next;
     }
+
+}
+void funct::IntOnly(int x)
+{
+        cout << "Please enter a valid integer: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 void funct::deleteAll(Node** head){
      Node* current = *head;

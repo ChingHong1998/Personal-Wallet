@@ -20,7 +20,7 @@ class Expense:public funct{
         string getDate() ;
         string getDetail() ;
         string getCategory();
-        void remake(string,string,string,string);
+        void remake(string,string,string);
         void setAmount(string);
         void setDetail(string);
         void setDate(string);

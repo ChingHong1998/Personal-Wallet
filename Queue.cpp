@@ -7,17 +7,10 @@ Queue::~Queue() {
 }
 
 bool Queue::isEmpty() {
-    // TODO: Fill in your code here
     return (frontPtr == NULL);
 }
 
 void Queue::enqueue(QueueItemType newItem) {
-    // HINT: // (a) Create a new node to store the new item
-    // (b) If the queue is empty, the front pointer will point
-    // to the new node. Otherwise, the back pointer's next pointer
-    // will point to the new node
-    // (c) Assign the back pointer to the new node
-    // TODO: Fill in your code here
     QueueNode* newNode = new QueueNode;
     newNode->item = newItem;
     newNode->next = NULL;
@@ -32,9 +25,6 @@ void Queue::enqueue(QueueItemType newItem) {
 }
 
 void Queue::dequeue(){
-    // HINT: // (a) Check whether the queue is empty
-    // (b) Remove the front item of the queue if it's not empty
-    // TODO: Fill in your code here
     if(isEmpty()) {
         cout<< "The queue is empty."<<endl;
     }
@@ -53,7 +43,6 @@ void Queue::dequeue(){
 }
 
 QueueItemType Queue::getFront() {
-    // TODO: Fill in your code here
     if(isEmpty()) {
         cout << "Queue is Empty!"<<endl;
         return "";

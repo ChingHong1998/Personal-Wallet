@@ -8,27 +8,29 @@
 #include "Stack.cpp"
 using namespace std;
 
-void display_menu();
+void display_menu(), expense_menu(), income_menu();
 Wallet *w1;
+funct f1;
+
 int main()
 {
-        funct f1;
         ifstream fin;
+        string username,balance, budget,currency;
         fin.open("Wallet.txt",ios::in);
         if(f1.is_emptyf(fin)) {
         ofstream fout;
         fout.open("Wallet.txt",ios::app);
         cout<< "Create a wallet.\nEnter your username: ";
-        string username;
         getline(cin, username);
         cout << "Enter your balance in your wallet: ";
-        double balance;
-        cin>> balance;
+        do {
+            getline(cin, balance);
+        }while(f1.isNotValidInt(balance));
         cout<< "Enter your budget(It will show warning message when your balance below budget): ";
-        double budget;
-        cin >> budget;
+        do {
+            getline(cin, budget);
+        }while(f1.isNotValidInt(budget));
         cout << "Currency Available:\n 1.Malaysia(RM)\n 2.Singapore(SGD)\n 3.China(RMB)\n 4.Thailand(Baht)\n";
-        string currency;
         cout <<"Enter your currency unit: ";
         int unit;
         cin >> unit;
@@ -49,7 +51,7 @@ int main()
         default:
             cout <<" Please choose from the available option: ";
         }
-        w1 = new Wallet(username,balance,budget,currency);
+        w1 = new Wallet(username,f1.toDouble(balance),f1.toDouble(budget),currency);
         fout << "Username: "<< username <<endl;
         fout << "Balance: " << balance <<endl;
         fout << "Budget: " << w1->getBudget() << endl;
@@ -84,164 +86,260 @@ int main()
         w1 = new Wallet(username,f1.toDouble(balance),f1.toDouble(budget),currency);
     }
     fin.close();
-    char con;
-    do{
+    string option;
+    do {
         display_menu();
-        cout << "\nContinue (y / n)?" << endl;
-        cin >> con;
-    }while( con == 'y' || con == 'Y');
-
+        cout << "\nDo you want to continue?[Y/N]\nYour Option>";
+        getline(cin,option);
+    }while(option == "y" || option == "Y");
 }
 
 void display_menu() {
-    ifstream fin;
-    fin.open("expenses.txt", ios::in);
-    ifstream fin2;
-    fin2.open("incomes.txt", ios::in);
     system("CLS");
     cout << "\tWelcome to Personal Wallet\n"<<w1->displayUsername()<<"'s current balance is "<< w1->getCurrency()<< w1->displayBalance() <<endl;
+    int choice;
     w1->warning();
-    cout << "Menu: \n  1. Add Expense. \n  2. Add Income. \n  3. Edit Expense. \n  4. Edit Income \n  5. Delete Expense \n  6. Delete Income \n  7. Display All Expense \n";
-    cout << "  8. Display All Income \n  9. Search Expense \n 10. Search Income \n 11. Sort Expense \n 12. Sort Income \n";
-    cout << " 13. Search Certain Expense \n 14. Search Certain Income \n 15. Display Chart For Expense \n 16. Display Chart For Income \n";
-    cout << " 17. Display Expense Summary \n 18. Display Income Summary \n 19. Change Currency \n 20. Exit" << endl;
-    cout << "\nEnter Your Choice: ";
-    int option;
-    cin>> option;
-    switch(option) {
-    case 1:
-        w1->addExpense();
-        break;
-    case 2:
-        w1->addIncome();
-        break;
-    case 3:{
-        cout << "Enter the date you want to edit: " ;
-        string date;
-        cin >> date;
-        w1->editExpense(date,fin);
-        break;
+    cout << "\nDo you wish to choose expense or income?" << endl;
+    cout << "[1] Expense" << endl;
+    cout << "[2] Income" << endl;
+    cout << "[3] Exit" << endl;
+    cout<<string(50, '.')<<endl;
+    cout << "Which option would you like to choose? : ";
+    while(!(cin>>choice)){
+        f1.IntOnly(choice);
     }
-    case 4:{
-        cout << "Enter the date you want to edit: ";
-        string date;
-        cin >> date;
-        w1->editIncome(date,fin2);
-        break;
+    switch(choice){
+        case 1:
+            expense_menu();
+            break;
+        case 2:
+            income_menu();
+            break;
+        case 3:
+            exit(0);
+            break;
+        default:
+            cerr << "YOU ENTER AN INVALID CHOOSE !!" << endl;
     }
-    case 5:{
-        cout << "Enter the date you want to delete: ";
-        string date;
-        cin >> date;
-        w1->deleteExpense(date,fin);
-        break;
+}
+
+void expense_menu(){
+    system("cls");
+    ifstream fin;
+    fin.open("expenses.txt", ios::in);
+    cout << "Expense Category....." << endl;
+    cout << "Main Menu" << endl;
+    int choice2, choose3;
+    cout << " [1] Add Expense\n [2] Edit Expense\n [3] Delete Expense\n [4] Display All Expense\n [5] Search Expense\n [6] Sort Expense\n [7] Expense Chart\n [8] Summarize Expense\n [9] Back" << endl;
+    cout<<string(50, '.')<<endl;
+    cout << "Which option would you like to choose? : ";
+    while(!(cin>>choice2)){
+        f1.IntOnly(choice2);
     }
-    case 6:{
-        cout << "Enter the date you want to delete: ";
-        string date;
-        cin >> date;
-        w1->deleteIncome(date,fin2);
-        break;
-    }
-    case 7:{
-        w1->displayAll(fin);
-        break;
-    }
-    case 8:{
-        w1->displayAll(fin2);
-        break;
-    }
-    case 9:{
-        w1->display_record(fin);
-        break;
-    }
-    case 10:{
-        w1->display_record(fin2);
-        break;
-    }
-    case 11:{
-        cout << "Sort \n 1) Amount (Ascending) \n 2) Amount (Descending) \n 3) Date (Ascending) \n 4) Date (Ascending)" << endl;
-        int choice;
-        cin>>choice;
-        switch(choice){
-            case 1:
-                w1->sort_expense_amount(choice);
-                break;
-            case 2:
-                w1->sort_expense_amount(choice);
-                break;
-            case 3:
-                w1->sort_expense_date(choice);
-                break;
-            case 4:
-                w1->sort_expense_date(choice);
-                break;
+    switch(choice2){
+        case 1:
+            w1->addExpense();
+            break;
+        case 2:
+            w1->editExpense(fin);
+            break;
+        case 3:
+            w1->deleteExpense(fin);
+            break;
+        case 4:
+            w1->displayAll(fin);
+            break;
+        case 5:{
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Searching The Expense Record...." << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "May you please choose a searching method?" << endl << endl;
+            cout << " [1] Specified Date\n [2] Specified Day\n [3] Specified Month\n [4] Specified Year\n [5] Range of Date\n [6] Range of Amount "<< endl;
+            cout<<string(50, '.')<<endl;
+            cout << "Which option would you like to choose? : ";
+            while(!(cin >> choose3)){
+                f1.IntOnly(choose3);
+            }
+            switch(choose3){
+                case 1:
+                    cout << "Enter the day you want to display[DDMMYY]: ";
+                    w1->display_day_record(fin);
+                    break;
+                case 2:
+                    w1->display_record(fin,choose3);
+                    break;
+                case 3:
+                    w1->display_record(fin,choose3);
+                    break;
+                case 4:
+                    w1->display_record(fin,choose3);
+                    break;
+                case 5:
+                    w1->search_expense();
+                    break;
+                case 6:
+                    w1->search2_expense();
+                    break;
+                default:
+                    cerr << "YOU ENTER AN INVALID CHOOSE !!" << endl;
+            }
+            break;
         }
-        break;
-    }
-    case 12:{
-        cout << "Sort \n 1) Amount (Ascending) \n 2) Amount (Descending) \n 3) Date (Ascending) \n 4) Date (Ascending)" << endl;
-        int choice;
-        cin>>choice;
-        switch(choice){
-            case 1:
-                w1->sort_income_amount(choice);
-                break;
-            case 2:
-                w1->sort_income_amount(choice);
-                break;
-            case 3:
-                w1->sort_income_date(choice);
-                break;
-            case 4:
-                w1->sort_income_date(choice);
-                break;
+        case 6:{
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Sorting The Expense Record...." << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "May you please choose a sorting method?" << endl;
+            cout << " [1] Amount (Descending)\n [2] Amount (Ascending)\n [3] Date (Descending)\n [4] Date (Ascending)" << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "Which option would you like to choose? : ";
+            cin >> choose3;
+            switch(choose3){
+                case 1:
+                    w1->sort_expense_amount(choose3);
+                    break;
+                case 2:
+                    w1->sort_expense_amount(choose3);
+                    break;
+                case 3:
+                    w1->sort_expense_date(choose3);
+                    break;
+                case 4:
+                    w1->sort_expense_date(choose3);
+                    break;
+                default:
+                    cerr << "PLEASE ENTER AN VALID CHOOSE !!" << endl;
+            }
+            cin.ignore();
+            break;
         }
-        break;
+        case 7:
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Displaying The Expense Chart...." << endl;
+            w1->ChartExpense();
+            break;
+        case 8:
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Displaying The Expense Summary...." << endl;
+            w1->displaySummaryExpense();
+            break;
+        case 9:
+            system("CLS");
+            display_menu();
+            break;
+        default:
+            cerr << "YOU ENTER AN INVALID CHOOSE !!" << endl;
     }
-    case 13:{
-        cout << "DATE OR AMOUNT \n 1. Amount \n 2. Date" <<endl;
-        int choice;
-        cin>> choice;
-        switch(choice){
-            case 1:
-                w1->search2_expense();
-                break;
+    fin.close();
+}
+
+void income_menu(){
+    system("cls");
+    ifstream fin;
+    fin.open("incomes.txt", ios::in);
+    cout << "Income Category....." << endl;
+    cout << "Main Menu" << endl;
+    int choice2, choose3;
+    cout << " [1] Add Income\n [2] Edit Income\n [3] Delete Income\n [4] Display All Income\n [5] Search Income\n [6] Sort Income\n [7] Income Chart\n [8] Summarize Income\n [9] Back" << endl;
+    cout<<string(50, '.')<<endl;
+    cout << "Which option would you like to choose? : ";
+    while(!(cin>>choice2)){
+        f1.IntOnly(choice2);
+    }
+    switch(choice2){
+        case 1:
+            w1->addIncome();
+            break;
+        case 2:
+            w1->editIncome(fin);
+            break;
+        case 3:
+            w1->deleteIncome(fin);
+            break;
+        case 4:
+            w1->displayAll(fin);
+            break;
+        case 5:{
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Searching The Income Record...." << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "May you please choose a searching method?" << endl << endl;
+            cout << " [1] Specified Date\n [2] Specified Day\n [3] Specified Month\n [4] Specified Year\n [5] Range of Day\n [6] Range of Amount" << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "Which option would you like to choose? : ";
+            while(!(cin >> choose3)){
+                f1.IntOnly(choose3);
+            }
+            switch(choose3){
+                case 1:
+                    cout << "Enter the day you want to display[DDMMYY]: ";
+                    w1->display_day_record(fin);
+                    break;
+                case 2:
+                    w1->display_record(fin,choose3);
+                    break;
+                case 3:
+                    w1->display_record(fin,choose3);
+                    break;
+                case 4:
+                    w1->display_record(fin,choose3);
+                    break;
+                case 5:
+                    w1->search_income();
+                    break;
+                case 6:
+                    w1->search2_income();
+                    break;
+                default:
+                    cerr << "YOU ENTER AN INVALID CHOOSE !!" << endl;
+            }
+            break;
         }
-        break;
-    }
-    case 14:{
-        cout << "DATE OR AMOUNT \n 1. Amount \n 2. Date" <<endl;
-        int choice;
-        cin>> choice;
-        switch(choice){
-            case 1:
-                w1->search2_income();
-                break;
+        case 6:{
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Sorting The Income Record...." << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "May you please choose a sorting method?" << endl;
+            cout << " [1] Amount (Descending)\n [2] Amount (Ascending)\n [3] Date (Descending)\n [4] Date (Ascending)" << endl;
+            cout<<string(50, '.')<<endl;
+            cout << "Which option would you like to choose? : ";
+            cin >> choose3;
+            switch(choose3){
+                case 1:
+                    w1->sort_income_amount(choose3);
+                    break;
+                case 2:
+                    w1->sort_income_amount(choose3);
+                    break;
+                case 3:
+                    w1->sort_income_date(choose3);
+                    break;
+                case 4:
+                    w1->sort_income_date(choose3);
+                    break;
+                default:
+                    cerr << "PLEASE ENTER AN VALID CHOOSE !!" << endl;
+            }
+            cin.ignore();
+            break;
         }
-        break;
+        case 7:
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Displaying The Income Chart...." << endl;
+            w1->ChartIncome();
+            break;
+        case 8:
+            cout<<string(50, '.')<<endl;
+            cout << "You Are Currently Displaying The Income Summary...." << endl;
+            w1->displaySummaryIncome();
+            break;
+        case 9:
+            system("CLS");
+            display_menu();
+            break;
+        default:
+            cerr << "YOU ENTER AN INVALID CHOOSE !!" << endl;
     }
-    case 15:
-        w1->ChartExpense();
-        break;
-    case 16:
-        w1->ChartIncome();
-        break;
-    case 17:
-        w1->displaySummaryExpense();
-        break;
-    case 18:
-        w1->displaySummaryIncome();
-        break;
-    case 19:
-        fin.close();
-        fin2.close();
-        w1->changeCurrency();
-        w1->update_data();
-        break;
-    case 20:
-        exit(0);
-    default:
-        cout << "\nInvalid option."<<endl;
-    }
+    fin.close();
+
 }

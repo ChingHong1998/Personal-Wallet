@@ -33,16 +33,6 @@ Sat Sep 01 23:52:15 2018
 33
 Clothes
 jeans
-0109188
-Sat Sep 01 23:52:35 2018
-33
-Others
-gg
-0209181
-Sun Sep 02 23:53:50 2018
-12
-Food
-breakfast
 0209182
 Sun Sep 02 23:54:10 2018
 23
@@ -58,6 +48,36 @@ Sun Sep 02 23:54:56 2018
 99
 Others
 hhhh
+2609181
+Wed Sep 26 15:15:16 2018
+232
+Food
+23ddsd
+2609182
+Wed Sep 26 20:46:21 2018
+15
+Accommodation
+f
+2609183
+Wed Sep 26 22:40:43 2018
+50
+Clothes
+40
+2609184
+Wed Sep 26 22:45:07 2018
+50
+Clothes
+423
+3009181
+Sun Sep 30 13:07:41 2018
+99
+Others
+hhhh
+3009182
+Sun Sep 30 13:12:12 2018
+888
+Accommodation
+Rental
 0210181
 Sun Oct 02 23:53:50 2018
 12
@@ -77,4 +97,9 @@ pillow
 Sun Oct 02 23:54:56 2018
 99
 Others
-hhhh
+hhhh3009183
+Sun Sep 30 16:44:12 2018
+123
+0
+gggg
+

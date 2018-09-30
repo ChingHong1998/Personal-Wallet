@@ -40,7 +40,6 @@ void Income::add_record(double amount, string detail, string category) {
         fout << category << "\n";
         fout << detail<<"\n";
     }
-    cout << "\nSuccess! ";
 }
 
 string Income::getID(){
@@ -116,7 +115,6 @@ void Income::saveBack(vector <Income> vec) {
     fout.close();
     remove("incomes.txt");
     rename("temp.txt", "incomes.txt");
-    cout<<"Save successful\n";
 }
 
 string Income::getAmount() {return tostr(this->amount);}
@@ -132,9 +130,7 @@ void Income::display() {
     cout << "Detail: " << getDetail()<<endl;
 }
 
-void Income::remake(string dt, string a, string cat, string dtl) {
-    if(dt != "")
-        setDate(dt);
+void Income::remake(string a, string cat, string dtl) {
     if(a != "")
         setAmount(a);
     if(cat!= "") {
@@ -153,10 +149,10 @@ void Income::remake(string dt, string a, string cat, string dtl) {
     if(dtl != "")
         setDetail(dtl);
 }
-vector <Income> Income::returnExpensesVector() {
+vector <Income> Income::returnIncomeVector() {
             ifstream fin;
-            vector<Income> expensesVector;
-            expensesVector.clear();
+            vector<Income> incomesVector;
+            incomesVector.clear();
             string temp;
             try {
                 fin.open("incomes.txt",ios::in|ios::app);
@@ -178,15 +174,14 @@ vector <Income> Income::returnExpensesVector() {
                         income.setCategory(temp);
                         getline(fin,temp);
                         income.setDetail(temp);
-                        expensesVector.push_back(income);
+                        incomesVector.push_back(income);
                     }
-                cout << "Pushed finished"<<endl;
                 }
             }catch (ifstream &x) {
                 cerr<<"Error occurs when open the file.";
             }
             fin.close();
-            return expensesVector;
+            return incomesVector;
 }
 void Income::setAmount(string amount) {this->amount = toDouble(amount);}
 void Income::setDate(string date) {this->date = date;}
@@ -195,7 +190,7 @@ void Income::setCategory(string category) {this->category = category;}
 void Income::setID(string id) {this->ID = id;}
 
 void Income::merge(vector <Income>& theArray, int first, int mid, int last, int choice ){
-    vector <Income> s = returnExpensesVector();
+    vector <Income> s = returnIncomeVector();
     int first1 = first;
     int last1 = mid;
     int first2 = mid+1;
