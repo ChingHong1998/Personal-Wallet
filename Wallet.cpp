@@ -1,4 +1,4 @@
-#include "wallet.h"
+#include "Wallet.h"
 
 Wallet::Wallet()
 {
@@ -92,14 +92,14 @@ bool Wallet::isEnough(double amount) {
 
 void Wallet::update_data() {
     ofstream temp;
-    temp.open("temp.txt", ios::app|ios::in);
+    temp.open("temp1.txt", ios::app|ios::in);
     temp << "Username: " << username<<endl;
     temp << "Balance: " << balance<<endl;
     temp << "Budget: " << budget<<endl;
     temp << "Currency: " << currency <<endl;
     temp.close();
     remove("Wallet.txt");
-    rename("temp.txt", "Wallet.txt");
+    rename("temp1.txt", "Wallet.txt");
 }
 
 void Wallet::editExpense(ifstream &filen1){
@@ -109,37 +109,47 @@ void Wallet::editExpense(ifstream &filen1){
     cout << "You Are Currently Editing An Expense Record...." << endl;
     cout << "Enter the date you want to edit[DDMMYY]: ";
     display_day_record(filen1);
+    filen1.close();
     cout << "Enter the ID You want to Edit: ";
     string id;
     getline(cin,id);
+    bool noThisID = true;
     for(int i = 0; i<expensesVector.size();i++) {
-        if(expensesVector[i].getID() == id) {
-            balance += toDouble(expensesVector[i].getAmount());
-            string amount="";
-            string category="";
-            string detail="";
-            system("CLS");
-            expensesVector[i].display();
-            cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
-            cout<< "Amount: ";
-            do {
-                getline(cin, amount);
-            }while(isNotValidInt(amount));
-            expensesVector[i].display_category();
-            cout<< "Category: ";
-            getline(cin,category);
-            cout<< "Detail: ";
-            getline(cin,detail);
-            cout << endl;
-            expensesVector[i].remake(amount,category,detail);
-            expensesVector[i].display();
-            balance -= toDouble(amount);
-            break;
+        if(expensesVector[i].getID() == id)
+            noThisID = false;
+    }
+    if(!noThisID) {
+        for(int i = 0; i<expensesVector.size();i++) {
+            if(expensesVector[i].getID() == id) {
+                balance += toDouble(expensesVector[i].getAmount());
+                string amount="";
+                string category="";
+                string detail="";
+                system("CLS");
+                expensesVector[i].display();
+                cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
+                cout<< "Amount: ";
+                do {
+                    getline(cin, amount);
+                }while(isNotValidInt(amount));
+                expensesVector[i].display_category();
+                cout<< "Category: ";
+                getline(cin,category);
+                cout<< "Detail: ";
+                getline(cin,detail);
+                expensesVector[i].remake(amount,category,detail);
+                cout<< ".......After........."<<endl;
+                expensesVector[i].display();
+                balance -= toDouble(amount);
+                cout<<"Edit successful";
+                break;
+            }
         }
     }
+    else
+        cout << "No This ID"<<endl;
     expense->saveBack(expensesVector);
     expensesVector.clear();
-    cout<<"Edit successful";
     update_data();
 }
 void Wallet::editIncome(ifstream &filen1){
@@ -149,37 +159,49 @@ void Wallet::editIncome(ifstream &filen1){
     cout << "You Are Currently Editing An Income Record...." << endl;
     cout << "Enter the date you want to edit[DDMMYY]: ";
     display_day_record(filen1);
+    filen1.close();
     cout << "Enter the ID You want to Edit: ";
     string id;
     getline(cin,id);
+    bool noThisID = true;
     for(int i = 0; i<incomesVector.size();i++) {
-        if(incomesVector[i].getID() == id) {
-            balance -= toDouble(incomesVector[i].getAmount());
-            string amount="";
-            string category="";
-            string detail="";
-            system("CLS");
-            incomesVector[i].display();
-            cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
-            cout<< "Amount: ";
-            do {
-                getline(cin, amount);
-            }while(isNotValidInt(amount));
-            incomesVector[i].display_category();
-            cout<< "Category: ";
-            getline(cin,category);
-            cout<< "Detail: ";
-            getline(cin,detail);
-            cout << endl;
-            incomesVector[i].remake(amount,category,detail);
-            incomesVector[i].display();
-            balance += toDouble(amount);
-            break;
+        if(incomesVector[i].getID() == id)
+            noThisID = false;
+    }
+    if(!noThisID) {
+        for(int i = 0; i<incomesVector.size();i++) {
+            if(incomesVector[i].getID() == id) {
+                balance -= toDouble(incomesVector[i].getAmount());
+                string amount="";
+                string category="";
+                string detail="";
+                system("CLS");
+                incomesVector[i].display();
+                cout<< "^^^^^^^Before^^^^^^^\nEditing... (Hit Enter to skip the part)\n";
+                cout<< "Amount: ";
+                do {
+                    getline(cin, amount);
+                }while(isNotValidInt(amount));
+                incomesVector[i].display_category();
+                cout<< "Category: ";
+                getline(cin,category);
+                cout<< "Detail: ";
+                getline(cin,detail);
+                cout << endl;
+                incomesVector[i].remake(amount,category,detail);
+                cout<< ".......After........."<<endl;
+                incomesVector[i].display();
+                balance += toDouble(amount);
+                cout<<"Edit successful";
+                break;
+            }
         }
     }
+    else
+        cout << "No This ID"<<endl;
     income->saveBack(incomesVector);
     incomesVector.clear();
-    cout<<"Edit successful";
+
     update_data();
 }
 void Wallet::display_day_record(ifstream &filen1){
@@ -231,19 +253,26 @@ void Wallet::deleteExpense(ifstream& fin){
     display_day_record(fin);
     cout << "Enter the ID You want to delete: ";
     getline(cin,id);
-    cout << id;
+    bool noThisId = true;
+    for(int i = 0; i< expensesVector.size();i++) {
+        if(id == expensesVector[i].getID())
+            noThisId = false;
+    }
+    if(!noThisId) {
     for(int i = 0; i< expensesVector.size();i++) {
         if(id == expensesVector[i].getID()) {
             balance += toDouble(expensesVector[i].getAmount());
             expensesVector.erase(expensesVector.begin()+i);
+            cout << "Deleted.\n";
             break;
         }
-    }
+        }
+    } else
+    cout<<"No This ID!"<<endl;
     fin.close();
     expense->saveBack(expensesVector);
     expensesVector.clear();
 
-    cout << "Deleted.\n";
     update_data();
 }
 
@@ -257,13 +286,22 @@ void Wallet::deleteIncome(ifstream& fin){
     display_day_record(fin);
     cout << "Enter the ID You want to delete: ";
     getline(cin,id);
+    bool noThisId = true;
+    for(int i = 0; i< incomesVector.size();i++) {
+        if(id == incomesVector[i].getID())
+            noThisId = false;
+    }
+    if(!noThisId) {
     for(int i = 0; i< incomesVector.size();i++) {
         if(id == incomesVector[i].getID()) {
-            balance -= toDouble(incomesVector[i].getAmount());
+            balance += toDouble(incomesVector[i].getAmount());
             incomesVector.erase(incomesVector.begin()+i);
+            cout << "Deleted.\n";
             break;
         }
-    }
+        }
+    } else
+    cout<<"No This ID!"<<endl;
     income->saveBack(incomesVector);
     incomesVector.clear();
     cout << "Deleted.\n";
@@ -286,7 +324,6 @@ void Wallet::displayAll(ifstream &fin) {
         q1.dequeue();
         cout<<"\tAmount: "<<q1.getFront()<<endl;
         q1.dequeue();
-        temp = q1.getFront();
         cout<<"\tCategory: "<<q1.getFront()<<endl;
         q1.dequeue();
         cout<<"\tDetail: "<<q1.getFront()<<endl<<endl;
@@ -599,11 +636,11 @@ void Wallet::search2_income(){
     ending = income->rightmost(vec, 0, vec.size() - 1, end_amount);
     for(int i = start; i <= ending; i++){
         found++;
-        cout << vec[i].getID() << endl;
-        cout << vec[i].getDate() << endl;
-        cout << vec[i].getAmount() << endl;
-        cout << vec[i].getCategory() << endl;
-        cout << vec[i].getDetail() << endl;
+        cout << "\tID: " << vec[i].getID() << endl;
+        cout << "\tDate: " << vec[i].getDate() << endl;
+        cout << "\tAmount: " << vec[i].getAmount() << endl;
+        cout << "\tCategory: " << vec[i].getCategory() << endl;
+        cout << "\tDetail: " << vec[i].getDetail() << endl;
         cout << endl;
     }
     if(found==0) {

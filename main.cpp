@@ -90,7 +90,7 @@ int main()
     do {
         display_menu();
         cout << "\nDo you want to continue?[Y/N]\nYour Option>";
-        getline(cin,option);
+        cin>>option;
     }while(option == "y" || option == "Y");
 }
 
@@ -99,10 +99,11 @@ void display_menu() {
     cout << "\tWelcome to Personal Wallet\n"<<w1->displayUsername()<<"'s current balance is "<< w1->getCurrency()<< w1->displayBalance() <<endl;
     int choice;
     w1->warning();
-    cout << "\nDo you wish to choose expense or income?" << endl;
+    cout << "\nDo you wish to choose expense, income or change currency?" << endl;
     cout << "[1] Expense" << endl;
     cout << "[2] Income" << endl;
-    cout << "[3] Exit" << endl;
+    cout << "[3] Change currency" << endl;
+    cout << "[4] Exit" << endl;
     cout<<string(50, '.')<<endl;
     cout << "Which option would you like to choose? : ";
     while(!(cin>>choice)){
@@ -116,6 +117,10 @@ void display_menu() {
             income_menu();
             break;
         case 3:
+            w1->changeCurrency();
+            w1->update_data();
+            break;
+        case 4:
             exit(0);
             break;
         default:

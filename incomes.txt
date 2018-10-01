@@ -1,0 +1,20 @@
+2209181
+Sat Sep 22 17:39:00 2018
+9999
+Salaary
+salary
+2309182
+Sun Sep 23 16:15:48 2018
+662.099
+Salary
+Salary
+2609181
+Wed Sep 26 13:13:21 2018
+66.2099
+Others
+Interest
+3009181
+Sat Sep 29 21:08;00 2018
+82.7211
+Dividend
+Stock NESTLE

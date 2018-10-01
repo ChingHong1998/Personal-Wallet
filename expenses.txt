@@ -1,105 +1,105 @@
 0109181
 Sat Sep 01 23:50:36 2018
-44
+14.5589
 Food
 lunch
 0109182
 Sat Sep 01 23:50:52 2018
-50
+16.5443
 Clothes
 padini
 0109183
 Sat Sep 01 23:51:05 2018
-20
+6.61769
 Transport
 grabcar
 0109184
 Sat Sep 01 23:51:21 2018
-66
+21.8384
 Accommodation
 maintenance
-0109185
-Sat Sep 01 23:51:42 2018
-99
-Others
-secrect
 0109186
 Sat Sep 01 23:52:02 2018
-30
+9.92653
 Food
 dinner
 0109187
 Sat Sep 01 23:52:15 2018
-33
+20
 Clothes
 jeans
 0209182
 Sun Sep 02 23:54:10 2018
-23
+7.61034
 Transport
 bus
 0209183
 Sun Sep 02 23:54:41 2018
-56
+18.5296
 Accommodation
 pillow
 0209184
 Sun Sep 02 23:54:56 2018
-99
+32.7576
 Others
 hhhh
 2609181
 Wed Sep 26 15:15:16 2018
-232
+76.7652
 Food
 23ddsd
 2609182
 Wed Sep 26 20:46:21 2018
-15
+4.96327
 Accommodation
 f
 2609183
 Wed Sep 26 22:40:43 2018
-50
+16.5443
 Clothes
 40
 2609184
 Wed Sep 26 22:45:07 2018
-50
+16.5443
 Clothes
 423
 3009181
 Sun Sep 30 13:07:41 2018
-99
+32.7576
 Others
 hhhh
 3009182
 Sun Sep 30 13:12:12 2018
-888
+293.825
 Accommodation
 Rental
 0210181
 Sun Oct 02 23:53:50 2018
-12
+5
 Food
 breakfast
-0210182
-Sun Oct 02 23:54:10 2018
-23
-Transport
-bus
 0210183
 Sun Oct 02 23:54:41 2018
-56
+20
 Accommodation
 pillow
-0210184
-Sun Oct 02 23:54:56 2018
-99
+3009184
+Sat Sep 29 18:33:40 2018
+74.4491
+Food
+Dinner buffet
+3009186
+Sat Sep 29 18:36:28 2018
+86.0299
+Accommodation
+Rent letih
+0110181
+Mon Oct 01 10:57:15 2018
+66.1438
 Others
-hhhh3009183
-Sun Sep 30 16:44:12 2018
-123
-0
-gggg
-
+Karate training
+0210183
+Tue Oct 02 00:23:00 2018
+999
+Others
+secret
